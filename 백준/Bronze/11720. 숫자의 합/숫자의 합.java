@@ -1,32 +1,22 @@
 import java.util.*;
 
-
-
 public class Main {
-
-
     public static void main(String[] args) {
-       Scanner input = new Scanner(System.in);
+        Scanner input = new Scanner(System.in);
 
-       int N = input.nextInt();
-       String S = input.next();
+        int N = input.nextInt();
 
-       List<Integer> list = new ArrayList<>();
-       for(int j =0;j<N;j++)
-       {
-           char tmp = S.charAt(j);
-           int n = tmp-'0';
-           list.add(n);
-       }
-       int sum = list.stream().mapToInt(Integer::intValue).sum();
-       System.out.println(sum);
+        String S = input.next();
 
+        int sum = 0;
 
+        for(int i=0;i<S.length();i++)
+        {
+            char c = S.charAt(i);
+            int x = c-48;
+            sum += x;
+        }
 
-
-
+        System.out.println(sum);
     }
-
-
 }
-
