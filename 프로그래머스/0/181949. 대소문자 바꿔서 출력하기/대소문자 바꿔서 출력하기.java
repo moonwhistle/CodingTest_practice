@@ -5,12 +5,12 @@ public class Solution {
         Scanner sc = new Scanner(System.in);
         String a = sc.next();
         for(char charA : a.toCharArray()){
-            if(charA > 90){
-                charA -= 32;
+            if(Character.isUpperCase(charA)){
+                charA += 32;
                 System.out.print(charA);
             }
-            else{
-                charA += 32;
+            else {
+                charA -= 32;
                 System.out.print(charA);
             }
         }
