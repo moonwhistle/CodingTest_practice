@@ -1,6 +1,7 @@
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Collections;
+
 class Solution {
     public int[] solution(int[] arr, int[][] queries) {
         int[] answer = new int[queries.length];
