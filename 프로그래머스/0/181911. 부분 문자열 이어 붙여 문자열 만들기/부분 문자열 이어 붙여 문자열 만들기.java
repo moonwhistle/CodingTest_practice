@@ -1,12 +1,8 @@
 class Solution {
     public String solution(String[] my_strings, int[][] parts) {
         StringBuilder answer = new StringBuilder();
-        for(int i = 0; i < my_strings.length; i++) {
-            char[] my_char = my_strings[i].toCharArray();
-            int[] part = parts[i];
-            for(int j = part[0]; j < part[1] + 1; j++) {
-                answer.append(my_char[j]);
-            }
+        for (int i = 0; i < my_strings.length; i++) {
+            answer.append(my_strings[i], parts[i][0], parts[i][1] + 1);
         }
         return answer.toString();
     }
