@@ -1,47 +1,24 @@
-import java.util.*;
-import java.util.regex.Pattern;
-
+import java.util.List;
+import java.util.Objects;
+import java.util.Scanner;
 
 public class Main {
-
-
-
     public static void main(String[] args) {
+
         Scanner input = new Scanner(System.in);
 
-        String S = input.nextLine();
+        String line = input.nextLine();
 
-        S = S.strip();
-        String[] Sarr = S.split(" ");
+        List<String> lineList = List.of(line.split(" "));
 
-        int cnt = 0;
+        int count = 0;
 
-        if(S.length()==0)
-        {
-            System.out.println(0);
-        }
-        else
-        {
-            for(String v: Sarr)
-            {
-                if(Pattern.matches("^[a-zA-Z]*$", v))
-                {
-                    cnt +=1;
-                }
+        for(String word: lineList) {
+            if(!Objects.equals(word, "")) {
+                count++;
             }
-
-            System.out.println(cnt);
         }
 
-
-
-
-
-
-
-
-
+        System.out.println(count);
     }
-
 }
-
