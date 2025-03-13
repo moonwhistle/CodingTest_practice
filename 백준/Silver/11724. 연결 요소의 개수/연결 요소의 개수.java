@@ -1,53 +1,52 @@
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Scanner;
 
-class Main {
+public class Main {
 
-    private static boolean[] visited;
-    private static List<List<Integer>> ss;
+    static ArrayList<Integer>[] graph;
+    static boolean[] visited;
+    static int count = 0;
 
     public static void main(String[] args) {
         Scanner input = new Scanner(System.in);
 
-        int N = input.nextInt();
-        int M = input.nextInt();
+        int N = input.nextInt(); // 정점의 개수
+        int M = input.nextInt(); // 간선의 개수
+        visited = new boolean[N + 1];
+        graph = new ArrayList[N + 1];
 
-        visited = new boolean[N+1];
-
-        ss = new ArrayList<>();
-
-        for(int i = 0 ; i<N+1; i++) {
-            ss.add(new ArrayList<>());
+        // 세팅
+        for (int i = 1; i < N + 1; i++) {
+            graph[i] = new ArrayList<>();
         }
 
-        for(int i = 0; i<M; i++) {
+        for (int i = 0; i < M; i++) {
             int start = input.nextInt();
             int end = input.nextInt();
-            ss.get(start).add(end);
-            ss.get(end).add(start);
+            graph[start].add(end);
+            graph[end].add(start);
         }
 
-        int count = 0;
-
-        for(int i = 1 ; i<N+1; i++){
-            if(!visited[i]) {
-                count ++;
-                DFS(i);
+        //dfs
+        for (int i = 1; i < N + 1; i++) {
+            if (!visited[i]) {
+                count++;
+                dfs(i);
             }
         }
 
         System.out.println(count);
     }
 
-    private static void DFS(int i) {
-        if(visited[i]){
+    private static void dfs(int start) {
+        if (visited[start]) {
             return;
         }
-        visited[i] = true;
-        for(int num : ss.get(i)) {
-            if(!visited[num]) {
-                DFS(num);
+        visited[start] = true;
+
+        for (Integer end : graph[start]) {
+            if (!visited[end]) {
+                dfs(end);
             }
         }
     }
