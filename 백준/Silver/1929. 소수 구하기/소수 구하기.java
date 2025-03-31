@@ -9,25 +9,19 @@ public class Main {
         int N = input.nextInt();
 
         for (int i = M; i <= N; i++) {
-            if(i == 0 || i ==1) {
+            boolean isDecimal = false;
+            if(i == 1) {
                 continue;
             }
-
-            if (decimal(i)) {
+            for(int j = 2; j <= Math.sqrt(i); j++) {
+                if (i % j == 0) {
+                    isDecimal = true;
+                    break;
+                }
+            }
+            if(!isDecimal) {
                 System.out.println(i);
             }
         }
-    }
-
-    public static boolean decimal(int X) {
-        int count = 0;
-
-        for (int i = 2; i <= Math.sqrt(X); i++) {
-            if (X % i == 0) {
-                count++;
-            }
-        }
-
-        return count == 0;
     }
 }
