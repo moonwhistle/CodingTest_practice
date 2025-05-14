@@ -1,43 +1,28 @@
-import java.lang.reflect.Array;
-import java.util.*;
-
-
+import java.util.Scanner;
 
 public class Main {
 
+    static float[] nums;
 
     public static void main(String[] args) {
-       Scanner input = new Scanner(System.in);
+        Scanner input = new Scanner(System.in);
 
-       int N = input.nextInt();
+        int N = input.nextInt();
+        nums = new float[N];
+        float max = Integer.MIN_VALUE;
+        float sum = 0;
 
-       List<Double> list = new ArrayList<>();
+        for(int i = 0; i<N; i++) {
+            int num = input.nextInt();
+            max = Math.max(max, num);
+            nums[i] = num;
+        }
 
-       for(int i=0;i<N;i++)
-       {
-           list.add(input.nextDouble());
-       }
+        for(int i = 0; i<N; i++) {
+            nums[i] = nums[i] / max * 100;
+            sum += nums[i];
+        }
 
-       double M = Collections.max(list);
-
-       List<Double> list1 = new ArrayList<>();
-      for(double v: list)
-      {
-          v = v/M*100;
-          list1.add(v);
-
-      }
-
-      double sum = list1.stream().mapToDouble(Double::valueOf).sum();
-
-      double aver = sum/list1.size();
-
-        System.out.println(aver);
-
-
-
+        System.out.println(sum / N);
     }
-
-
 }
-
