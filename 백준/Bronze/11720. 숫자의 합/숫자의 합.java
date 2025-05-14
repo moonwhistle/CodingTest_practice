@@ -1,20 +1,16 @@
-import java.util.*;
+import java.util.Scanner;
 
 public class Main {
+
     public static void main(String[] args) {
         Scanner input = new Scanner(System.in);
 
-        int N = input.nextInt();
-
-        String S = input.next();
-
         int sum = 0;
+        int N = input.nextInt();
+        String M = input.next();
 
-        for(int i=0;i<S.length();i++)
-        {
-            char c = S.charAt(i);
-            int x = c-48;
-            sum += x;
+        for(int i = 0; i<M.length(); i++) {
+            sum += Integer.parseInt(String.valueOf(M.charAt(i)));
         }
 
         System.out.println(sum);
