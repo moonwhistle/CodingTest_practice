@@ -5,12 +5,11 @@ public class Main {
     public static void main(String[] args) {
         Scanner input = new Scanner(System.in);
 
-        int sum = 0;
         int N = input.nextInt();
-        String M = input.next();
-
-        for(int i = 0; i<M.length(); i++) {
-            sum += Integer.parseInt(String.valueOf(M.charAt(i)));
+        String number = input.next();
+        int sum = 0;
+        for(int i = 0 ; i<N; i++) {
+            sum  += number.charAt(i) - '0';
         }
 
         System.out.println(sum);
