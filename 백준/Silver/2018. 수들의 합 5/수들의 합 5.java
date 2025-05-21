@@ -1,51 +1,35 @@
-import javax.crypto.spec.PSource;
-import java.util.*;
-
-
+import java.util.Scanner;
 
 public class Main {
+
     public static void main(String[] args) {
         Scanner input = new Scanner(System.in);
 
         int N = input.nextInt();
+        int[] numbers = new int[N];
 
-        int[] arr= new int[N];
-
-        int num = 1;
-        for(int i=0;i<N;i++)
-        {
-            arr[i] = num;
-            num++;
+        for (int i = 0; i < N; i++) {
+            numbers[i] = i + 1;
         }
 
-        int cnt =0;
+        int cnt = 1;
 
-        for(int i=0;i<N;i++)
-        {
-            int sum = 0;
+        for (int i = 0; i < N-1; i++) {
+            int sum = numbers[i];
 
-            for(int j=i;j<N;j++)
-            {
+            for(int j = i + 1; j<N; j++){
+                sum += numbers[j];
 
-                sum+=arr[j];
-                
-                if(sum>N)
-                {
+                if(sum > N) {
                     break;
                 }
-
-                if(sum == N)
-                {
+                if(sum == N) {
                     cnt++;
                     break;
                 }
-
-
-
             }
         }
 
         System.out.println(cnt);
-
     }
 }
