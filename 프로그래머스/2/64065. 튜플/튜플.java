@@ -5,22 +5,23 @@ import java.util.Objects;
 import java.util.Set;
 
 class Solution {
-
+    
     public static int[] solution(String s) {
-        String[] splitNumber = splitNumbers(s);
-        int[] answer = new int[splitNumber.length];
-        Set<String> exist = new HashSet<>();
+        String[] splitStringNumbers = splitStringNumbers(s);
+        Arrays.sort(splitStringNumbers, Comparator.comparingInt(String::length));
+        int[] answer = new int[splitStringNumbers.length];
 
-        for (int i = 0; i < splitNumber.length; i++) {
-            String[] numbers = splitNumber[i].split(",");
-
-            for(String number : numbers) {
-                if (Objects.equals(number, "")) {
+        Set<Integer> duplicatedNumber = new HashSet<>();
+        for (int i = 0; i < splitStringNumbers.length; i++) {
+            String[] splitCommaNumber = splitStringNumbers[i].split(",");
+            for (String number : splitCommaNumber) {
+                if(Objects.equals(number, "")) {
                     continue;
                 }
-                if(!exist.contains(number)) {
-                    answer[i] = Integer.parseInt(number);
-                    exist.add(number);
+                int num = Integer.parseInt(number);
+                if(!duplicatedNumber.contains(num)) {
+                    answer[i] = num;
+                    duplicatedNumber.add(num);
                 }
             }
         }
@@ -28,13 +29,9 @@ class Solution {
         return answer;
     }
 
-    private static String[] splitNumbers(String s) {
-        String removedOpenBraceString = s.substring(0, s.length() - 2)
-                .replaceAll("[{]", "");
-
-        String[] splitString = removedOpenBraceString.split("}");
-        Arrays.sort(splitString, Comparator.comparing(String::length));
-
-        return splitString;
+    private static String[] splitStringNumbers(String s) {
+        return s.substring(0, s.length() - 2)
+                .replaceAll("[{]", "")
+                .split("}");
     }
 }
