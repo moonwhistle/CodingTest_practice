@@ -1,47 +1,67 @@
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.stream.Collectors;
+import java.util.Arrays;
 
 class Solution {
 
-    // stages 오름차순 정렬 후, N 까지 돌리면서 실패율 계산
-
-    static Map<Integer, Float> failRate = new HashMap<>();
-
-    public static List<Integer> solution(int N, int[] stages) {
-        calculateFailRate(N, stages);
-        System.out.println(failRate);
-
-        return failRate.entrySet()
-                .stream()
-                .sorted(Map.Entry.<Integer, Float>comparingByValue().reversed())
-                .map(Entry::getKey)
-                .collect(Collectors.toList());
+    public static void main(String[] args) {
+        solution(5, new int[]{2, 1, 2, 6, 2, 4, 3, 3});
     }
 
-    private static void calculateFailRate(int N, int[] stages) {
-        int[] count  = countStageCount(N, stages);
-        int length = stages.length;
+    public static int[] solution(int N, int[] stages) {
+        int[] answer = new int[N];
+        float[] failRate = calculateFailRate(N, stages);
+        float[][] failOrder = makeOrder(N, failRate);
 
-        for(int i = 1; i<=N; i++) {
-            if (length == 0) {
-                failRate.put(i, 0f);
+        for(int i = 0; i<N; i++) {
+            answer[i] = (int) failOrder[i][0];
+        }
+
+        return answer;
+    }
+
+    private static float[][] makeOrder(int N, float[] failRate) {
+        float[][] order = new float[N][2];
+        for (int i = 0; i < N; i++) {
+            order[i][0] = i+1; // 스테이지 번호
+            order[i][1] = failRate[i+1]; // 실패율
+        }
+
+        Arrays.sort(order, (a,b) -> {
+            int comp = Float.compare(b[1], a[1]); // 실패율 내림차순
+            if (comp == 0) {
+                return Float.compare(a[0], b[0]); // 스테이지 번호 오름차순
+            }
+            return comp;
+        });
+
+        return order;
+    }
+
+
+    private static float[] calculateFailRate(int N, int[] stages) {
+        float[] failRate = new float[N + 1];
+        int people = stages.length;
+
+        for (int stage : stages) {
+            if (stage > N) {
+                continue;
+            }
+
+            failRate[stage]++;
+        }
+
+        for (int i = 1; i < failRate.length; i++) {
+            int challengers = (int) failRate[i];
+
+            if (people == 0) {
+                failRate[i] = 0;
             } else {
-                failRate.put(i, (float) count[i] / length);
-                length -= count[i];
+                failRate[i] = challengers / (float) people;
+                people -= challengers;
             }
         }
+
+        return failRate;
     }
 
-    private static int[] countStageCount(int N, int[] stages) {
-        int[] count = new int[N+2];
 
-        for(int stage : stages) {
-            count[stage] ++;
-        }
-
-        return count;
-    }
 }
