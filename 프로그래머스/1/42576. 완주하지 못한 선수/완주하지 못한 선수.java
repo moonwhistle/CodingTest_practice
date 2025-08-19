@@ -1,20 +1,26 @@
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
 
 class Solution {
-    public String solution(String[] participant, String[] completion) {
-         Map<String, Integer> member = new HashMap<>();
-        for(String name : participant){
-            member.put(name, member.getOrDefault(name, 0) + 1);
-        }
-        for(String name : completion){
-            member.put(name, member.getOrDefault(name, 0) - 1);
-        }
+
+    public static String solution(String[] participant, String[] completion) {
         String answer = "";
-        for(String name : member.keySet()){
-            if(member.get(name) != 0) {
-                answer = name;
+        Map<String, Integer> status = new HashMap<>();
+
+        for(String person : participant) { // 참가자 수만큼 증가
+            status.put(person, status.getOrDefault(person, 0) + 1);
+        }
+
+        for(String person : completion) { // 완주자 수만큼 감소
+            status.put(person, status.getOrDefault(person, 0) - 1);
+        }
+
+        for(String person : status.keySet()) { // 해당 키를 순회하며 value 가 0이 아닌 사람을 탐색
+            if(status.get(person) != 0) {
+                answer = person;
             }
         }
+        
         return answer;
     }
 }
