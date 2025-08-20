@@ -1,19 +1,23 @@
-import java.util.HashSet;
-import java.util.Set;
+import java.util.HashMap;
+import java.util.Map;
 
 class Solution {
-    public int solution(int[] nums) {
+
+    public static int solution(int[] nums) {
         int answer = 0;
-        Set<Integer> category = new HashSet<>();
-        for (int num : nums) {
-            category.add(num);
+        int select = nums.length / 2;
+        Map<Integer, Integer> poketmons = new HashMap<>();
+
+        for(int i : nums) {
+            poketmons.put(i, poketmons.getOrDefault(i, 0) + 1);
         }
-        if (nums.length / 2 < category.size()) {
-            answer = nums.length / 2;
+
+        if(poketmons.size() >= select) {
+            answer = select;
+        } else {
+            answer = poketmons.size();
         }
-        if (nums.length / 2 >= category.size()) {
-            answer = category.size();
-        }
+
         return answer;
     }
 }
