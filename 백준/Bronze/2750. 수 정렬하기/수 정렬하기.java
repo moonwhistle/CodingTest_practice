@@ -1,25 +1,22 @@
-import java.util.*;
+import java.util.Arrays;
+import java.util.Scanner;
 
 public class Main {
-    public static void main(String[] args) {
 
+    public static void main(String[] args) {
         Scanner input = new Scanner(System.in);
 
         int N = input.nextInt();
+        int[] array = new int[N];
 
-        List<Integer> list = new ArrayList<Integer>();
-        for(int i=0;i<N;i++)
-        {
-            list.add(input.nextInt());
+        for (int i = 0; i < N; i++) {
+            array[i] = input.nextInt();
         }
 
-        Collections.sort(list);
-
-        for(int v: list)
-        {
-            System.out.println(v);
+        Arrays.sort(array);
+        
+        for (int i = 0; i < N; i++) {
+            System.out.println(array[i]);
         }
-
-
     }
 }
