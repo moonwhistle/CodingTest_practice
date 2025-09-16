@@ -2,25 +2,30 @@ import java.util.HashMap;
 import java.util.Map;
 
 class Solution {
-
-    public static String solution(String[] participant, String[] completion) {
+    public String solution(String[] participant, String[] completion) {
         String answer = "";
-        Map<String, Integer> status = new HashMap<>();
 
-        for(String person : participant) { // 참가자 수만큼 증가
-            status.put(person, status.getOrDefault(person, 0) + 1);
+        // 참여자
+        Map<String, Integer> participantMap = new HashMap<>();
+        for (String par : participant) {
+            participantMap.put(par, participantMap.getOrDefault(par, 0) + 1);
         }
 
-        for(String person : completion) { // 완주자 수만큼 감소
-            status.put(person, status.getOrDefault(person, 0) - 1);
+        // 우승자
+        Map<String, Integer> completionMap = new HashMap<>();
+        for (String com : completion) {
+            completionMap.put(com, completionMap.getOrDefault(com, 0) + 1);
         }
 
-        for(String person : status.keySet()) { // 해당 키를 순회하며 value 가 0이 아닌 사람을 탐색
-            if(status.get(person) != 0) {
-                answer = person;
+        // 참가자의 key 를 돌면서, completion 에 없거나 or count 가 더 적다면 그 사람이 범인
+        for(String key : participantMap.keySet()) {
+            if(!completionMap.containsKey(key)) {
+                answer = key;
+            } else if(participantMap.get(key) - completionMap.get(key) > 0) {
+                answer = key;
             }
         }
-        
+
         return answer;
     }
 }
