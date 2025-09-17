@@ -8,22 +8,17 @@ public class Main {
         int N = input.nextInt();
         int K = input.nextInt();
 
-        int[] coin = new int[N];
-
+        int[] coins = new int[N];
         for (int i = 0; i < N; i++) {
-            coin[i] = input.nextInt();
+            coins[i] = input.nextInt();
         }
 
-        int money = K;
+        // 뒤에서부터 내려오며 계산
         int count = 0;
-
-        for(int i = N-1; i>=0; i--) {
-            if(coin[i] <= money) {
-                count += money / coin[i];
-                money = money % coin[i];
-            }
+        for (int i = N - 1; i >= 0; i--) {
+            count += K / coins[i];
+            K %= coins[i];
         }
-
 
         System.out.println(count);
     }
