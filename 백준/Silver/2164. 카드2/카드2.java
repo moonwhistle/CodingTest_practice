@@ -1,6 +1,6 @@
-
-
-import java.util.*;
+import java.util.LinkedList;
+import java.util.Queue;
+import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
@@ -8,22 +8,18 @@ public class Main {
 
         int N = input.nextInt();
 
-        Queue<Integer> queue = new LinkedList<>();
-        for(int i=1;i<N+1;i++) //큐에 원소 삽입
-        {
-            queue.add(i);
+        Queue<Integer> cards = new LinkedList<>();
+        for(int i = 0; i<N; i++) {
+            cards.add(i + 1);
+        }
+        
+        while(cards.size() != 1) {
+            cards.poll(); // 위에 버리고
+            
+            int num = cards.poll();
+            cards.add(num);
         }
 
-       while(queue.size()>1)
-       {
-               queue.poll();//버리고
-
-               queue.add(queue.poll());//맨 밑으로 넣는 작업
-
-       }
-
-        System.out.println(queue.poll());
-
-
+        System.out.println(cards.peek());
     }
 }
