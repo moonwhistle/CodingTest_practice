@@ -1,51 +1,52 @@
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedList;
-import java.util.List;
+import java.util.Map;
 import java.util.Queue;
-import java.util.Stack;
+import java.util.TreeMap;
 
 class Solution {
 
-    public static int[] solution(int[] progresses, int[] speeds) {
-        int[] answer = {};
+    // stack 에 값 넣어주고
+    // count 세줌
+    // (count * speed) + prog 가 100 넘는지 확인
 
-        //세팅
-        Queue<Integer> progressQueue = new LinkedList<>();
-        Queue<Integer> speedQueue = new LinkedList<>();
-        for (int progress : progresses) {
-            progressQueue.add(progress);
-        }
-        for(int speed : speeds) {
-            speedQueue.add(speed);
-        }
-        List<Integer> complete = new ArrayList<>();
+    static Queue<Integer> proSt = new LinkedList<>();
+    static Queue<Integer> spSt = new LinkedList<>();
 
-        //로직
-        while (!progressQueue.isEmpty()) {
-            int count = 0;
+    public int[] solution(int[] progresses, int[] speeds) {
+        setting(progresses, speeds);
+        Map<Integer, Integer> completeCount = new TreeMap<>();
 
-            for (int i = 0; i < progressQueue.size(); i++) {
-                int progress = progressQueue.poll();
-                int speed = speedQueue.poll();
-                progressQueue.add(progress + speed);
-                speedQueue.add(speed);
-            }
+        int count = 1;
 
-            while(!progressQueue.isEmpty() && progressQueue.peek() >= 100) {
-                progressQueue.poll();
-                speedQueue.poll();
+        while (!proSt.isEmpty()) {
+            if (proSt.peek() + count * spSt.peek() >= 100) {
+                completeCount.put(count, completeCount.getOrDefault(count, 0) + 1);
+                proSt.poll();
+                spSt.poll();
+            } else {
                 count++;
             }
-
-            if(count > 0) {
-                complete.add(count);
-            }
         }
 
-        answer = complete.stream()
-                .mapToInt(Integer::intValue)
-                .toArray();
-
+        int[] answer = new int[completeCount.size()];
+        
+        int idx = 0;
+        for(int i : completeCount.values()) {
+            answer[idx] = i;
+            idx++;
+        }
+        
         return answer;
+    }
+
+    private void setting(int[] progresses, int[] speeds) {
+        for (int i : progresses) {
+            proSt.add(i);
+        }
+
+        for (int i : speeds) {
+            spSt.add(i);
+        }
     }
 }
