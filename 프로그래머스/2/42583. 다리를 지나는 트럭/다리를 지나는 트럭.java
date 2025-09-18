@@ -3,33 +3,63 @@ import java.util.Queue;
 
 class Solution {
 
-    public static int solution(int bridge_length, int weight, int[] truck_weights) {
-        int answer = 0;
-        //세팅
-        Queue<Integer> trucks = new LinkedList<>();
-        for (int i : truck_weights) {
-            trucks.add(i);
-        }
-        Queue<Integer> bridge = new LinkedList<>();
-        for (int i = 0; i < bridge_length; i++) {
-            bridge.add(0);
-        }
-        int currentWeight = 0;
+    static Queue<Truck> waiting = new LinkedList<>();
+    static Queue<Truck> bridge = new LinkedList<>();
 
-        //로직
-        while(!trucks.isEmpty() || currentWeight > 0) {
-            int front = bridge.poll();
-            currentWeight -= front;
-            if(!trucks.isEmpty() && trucks.peek() + currentWeight <= weight) {
-                int truck = trucks.poll();
-                bridge.add(truck);
-                currentWeight += truck;
-            } else {
-                bridge.add(0);
+    public int solution(int bridge_length, int weight, int[] truck_weights) {
+        int answer = 0;
+
+        setting(truck_weights);
+        int nowWeight =0;
+
+        while(!bridge.isEmpty() || !waiting.isEmpty()) {
+            int removeCount = 0;
+
+            for(Truck truck : bridge) {
+                truck.move();
+
+                if(truck.place > bridge_length) {
+                    removeCount++;
+                }
             }
+
+            for(int i = 0 ; i<removeCount; i++) {
+                Truck truck = bridge.poll();
+                nowWeight -= truck.weight;
+            }
+
+            if(!waiting.isEmpty()) {
+                if(nowWeight + waiting.peek().weight <= weight) {
+                    nowWeight += waiting.peek().weight;
+                    Truck truck = waiting.poll();
+                    truck.move();
+                    bridge.add(truck);
+                }
+            }
+
             answer++;
         }
-        
+
         return answer;
+    }
+
+    private void setting(int[] truck_weights) {
+        for(int i : truck_weights) {
+            waiting.add(new Truck(0, i));
+        }
+    }
+}
+
+class Truck {
+    int place;
+    int weight;
+
+    public Truck(int place, int weight) {
+        this.place = place;
+        this.weight = weight;
+    }
+
+    public void move() {
+        this.place++;
     }
 }
