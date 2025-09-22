@@ -8,28 +8,29 @@ public class Main {
 
         int N = input.nextInt();
         int M = input.nextInt();
+        int[] nums = new int[N];
 
-        int[] arr = new int[N];
-        for(int i = 0 ; i<N; i++) {
-            arr[i] = input.nextInt();
+        for(int i = 0; i<nums.length; i++) {
+            nums[i] = input.nextInt();
         }
+        Arrays.sort(nums);
 
-        Arrays.sort(arr);
         int max = Integer.MIN_VALUE;
-        for(int i = 0 ; i< N-2 ; i++ ){
-            int delimiter = arr[i];
-            int target = M - delimiter;
+
+        for(int i = 0 ; i< nums.length-2; i++) {
+            int delimiter = nums[i];
+
             int start = i + 1;
-            int end = N-1;
+            int end = nums.length - 1;
 
             while(start < end) {
-                int sum = arr[start] + arr[end];
+                int sum = delimiter + nums[start] + nums[end];
 
-                if(sum <= target) {
-                    max = Math.max(max, sum + delimiter);
-                    start++;
-                } else {
+                if(sum > M) {
                     end--;
+                } else {
+                    start++;
+                    max = Math.max(max, sum);
                 }
             }
         }
