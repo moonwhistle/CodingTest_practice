@@ -6,23 +6,24 @@ public class Main {
         Scanner input = new Scanner(System.in);
 
         String N = input.next();
-        int size = N.length();
-        int start = Integer.parseInt(N) - size * 9;
+        int min = Integer.MAX_VALUE;
 
-        if(start < 0) {
+        int len = N.length();
+        int start = Integer.parseInt(N) - (9 * len);
+
+        if (start < 0) {
             start = 0;
         }
 
-        int min = Integer.MAX_VALUE;
-        for(int i = start ; i<Integer.parseInt(N); i++) {
-            int len = String.valueOf(i).length();
+        for (int i = start; i < Integer.parseInt(N); i++) {
+            String num = String.valueOf(i);
             int sum = i;
 
-            for(int j = 0; j < len; j++) {
-                sum += String.valueOf(i).charAt(j) - '0';
+            for (int j = 0; j < num.length(); j++) {
+                sum += num.charAt(j) - '0';
             }
 
-            if(sum == Integer.parseInt(N)) {
+            if (sum == Integer.parseInt(N)) {
                 min = Math.min(min, i);
             }
         }
