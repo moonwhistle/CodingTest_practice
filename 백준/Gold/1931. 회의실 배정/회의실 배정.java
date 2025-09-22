@@ -8,7 +8,6 @@ public class Main {
     public static void main(String[] args) {
         Scanner input = new Scanner(System.in);
 
-        // setting
         int N = input.nextInt();
         List<Room> rooms = new ArrayList<>();
 
@@ -18,17 +17,17 @@ public class Main {
 
             rooms.add(new Room(start, end));
         }
+
         Collections.sort(rooms);
 
-        // 순회하며, 앞 시간이 끝 시간 앞에 오면 count++
         int count = 1;
-        Room previous = rooms.get(0);
-        for (int i = 1; i < rooms.size(); i++) {
-            Room current = rooms.get(i);
+        Room pre = rooms.get(0);
 
-            if (previous.end <= current.start) {
-                previous = current;
+        for (int i = 1; i < rooms.size(); i++) {
+            if (rooms.get(i).start >= pre.end) {
                 count++;
+
+                pre = rooms.get(i);
             }
         }
 
@@ -46,10 +45,11 @@ class Room implements Comparable<Room> {
     }
 
     @Override
-    public int compareTo(Room other) {
-        if (other.end == this.end) {
-            return this.start - other.start;
+    public int compareTo(Room o) {
+        if (this.end == o.end) {
+            return this.start - o.start;
         }
-        return this.end - other.end;
+
+        return this.end - o.end;
     }
 }
