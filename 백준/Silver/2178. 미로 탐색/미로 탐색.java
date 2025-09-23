@@ -2,12 +2,12 @@ import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Scanner;
 
-class Main {
+public class Main {
 
-    private static int[] dx = {0, 1, 0, -1};
-    private static int[] dy = {1, 0, -1, 0};
-    private static int[][] data;
-    private static boolean[][] visited;
+    static boolean[][] visited;
+    static int[] dx = {0, 1, 0, -1};
+    static int[] dy = {1, 0, -1, 0};
+    static int[][] distance;
 
     public static void main(String[] args) {
         Scanner input = new Scanner(System.in);
@@ -15,39 +15,46 @@ class Main {
         int N = input.nextInt();
         int M = input.nextInt();
 
-        data = new int[N][M];
+        int[][] map = new int[N][M];
         visited = new boolean[N][M];
+        distance = new int[N][M];
 
         for (int i = 0; i < N; i++) {
             String line = input.next();
-            for (int j = 0; j < M; j++) {
-                data[i][j] = Integer.parseInt(String.valueOf(line.charAt(j)));
+            int j = 0;
+
+            for (char lineElement : line.toCharArray()) {
+                map[i][j] = lineElement - '0';
+                j++;
             }
         }
-        BFS(0,0);
 
-        System.out.println(data[N-1][M-1]);
+        go(0, 0, map);
 
+        System.out.println(distance[map.length - 1][map[0].length - 1]);
     }
 
-    private static void BFS(int i, int j) {
+    private static void go(int startX, int startY, int[][] map) {
         Queue<int[]> queue = new LinkedList<>();
-        queue.offer(new int[]{i, j});
-        visited[i][j] = true;
+
+        queue.add(new int[]{startX, startY});
+        visited[startX][startY] = true;
+        distance[startX][startY] = 1;
 
         while (!queue.isEmpty()) {
-            int[] current = queue.poll();
+            int[] point = queue.poll();
 
-            for (int k = 0; k < 4; k++) {
-                int x = current[0] + dx[k];
-                int y = current[1] + dy[k];
+            int nowX = point[0];
+            int nowY = point[1];
 
-                if (x >= 0 && x < data.length && y >= 0 && y < data[0].length) {
-                    if (!visited[x][y] && data[x][y] == 1) {
-                        data[x][y] = data[current[0]][current[1]] + 1;
-                        visited[x][y] = true;
-                        queue.add(new int[]{x, y});
-                    }
+            for (int i = 0; i < 4; i++) {
+                int x = nowX + dx[i];
+                int y = nowY + dy[i];
+
+                if (x >= 0 && y >= 0 && x < map.length && y < map[0].length && map[x][y] == 1 && !visited[x][y]) {
+                    visited[x][y] = true;
+                    distance[x][y] = distance[nowX][nowY] + 1;
+                    queue.add(new int[]{x, y});
                 }
             }
         }
