@@ -1,13 +1,11 @@
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.Queue;
 import java.util.Scanner;
 
 public class Main {
 
-    static List<List<Integer>> data = new ArrayList<>();
     static boolean[] visitedDfs;
     static boolean[] visitedBfs;
 
@@ -16,59 +14,61 @@ public class Main {
 
         int N = input.nextInt();
         int M = input.nextInt();
-        int start = input.nextInt();
+        int V = input.nextInt();
 
         visitedDfs = new boolean[N + 1];
         visitedBfs = new boolean[N + 1];
 
-        //dfs 초기화
-        for (int i = 0; i < N + 1; i++) {
-            data.add(new ArrayList<>());
+        ArrayList<Integer>[] map = new ArrayList[N + 1];
+
+        for(int i = 1 ; i<N + 1; i++) {
+            map[i] = new ArrayList<>();
         }
 
-        //데이터 세팅
-        for (int i = 0; i < M; i++) {
-            int first = input.nextInt();
-            int second = input.nextInt();
-            data.get(first).add(second);
-            data.get(second).add(first);
+        for(int i = 0; i<M; i++) {
+            int start = input.nextInt();
+            int end = input.nextInt();
+
+            map[start].add(end);
+            map[end].add(start);
         }
 
-        //데이터 정렬
-        for (int i = 0; i < N + 1; i++) {
-            Collections.sort(data.get(i));
+        for (int i = 1; i <= N; i++) {
+            Collections.sort(map[i]);
         }
 
-        DFS(start);
-        System.out.print(System.lineSeparator());
-        BFS(start);
+        dfs(V, map);
+        System.out.println();
+        bfs(V, map);
     }
 
-    private static void BFS(int i) {
+    private static void dfs(int V, ArrayList<Integer>[] map) {
+        if(visitedDfs[V]) {
+            return;
+        }
+
+        visitedDfs[V] = true;
+        System.out.print(V + " ");
+
+        for(int i : map[V]) {
+            dfs(i, map);
+        }
+    }
+
+    private static void bfs(int V, ArrayList<Integer>[] map) {
         Queue<Integer> queue = new LinkedList<>();
-        queue.offer(i);
-        visitedBfs[i] = true;
 
-        while (!queue.isEmpty()) {
-            int current = queue.poll();
-            System.out.print(current + " ");
+        visitedBfs[V] = true;
+        queue.add(V);
 
-            for (int num : data.get(current)) {
-                if (!visitedBfs[num]) {
-                    queue.add(num);
-                    visitedBfs[num] = true;
-                }
-            }
-        }
-    }
+        while(!queue.isEmpty()) {
+            int num = queue.poll();
+            System.out.print(num + " ");
 
-    private static void DFS(int i) {
-        if (!visitedDfs[i]) {
-            visitedDfs[i] = true;
-            System.out.print(i + " ");
-            for (int num : data.get(i)) {
-                if (!visitedDfs[num]) {
-                    DFS(num);
+            for(int next : map[num]) {
+                if(!visitedBfs[next]) {
+                    visitedBfs[next] = true;
+                    queue.add(next);
                 }
             }
         }
