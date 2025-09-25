@@ -1,43 +1,40 @@
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 class Solution {
-
-    public static int solution(int n, int[] lost, int[] reserve) {
+    public int solution(int n, int[] lost, int[] reserve) {
         int answer = 0;
-        //세팅
-        int[] student = new int[n + 1];
-        for (int i = 1; i <= n; i++) {
-            student[i] = 1;
-        }
 
-        //여분
+        // setting
+        Set<Integer> losts = new HashSet<>();
+        Set<Integer> reserves = new HashSet<>();
+
         for (int i : reserve) {
-            student[i] = 2;
+            reserves.add(i);
         }
 
-        //잃어버림
+        // 겹치는 부분 제거
         for (int i : lost) {
-            student[i] -= 1;
-        }
-
-        //빌려주기
-        for (int i = 1; i <= n; i++) {
-            if (student[i] == 2) {
-                if (i > 1 && student[i - 1] == 0) {
-                    student[i] -= 1;
-                    student[i - 1] += 1;
-                } else if (i < n && student[i + 1] == 0) {
-                    student[i] -= 1;
-                    student[i + 1] += 1;
-                }
+            if (reserves.contains(i)) {
+                reserves.remove(i);
+            } else {
+                losts.add(i);
             }
         }
 
-        for (int i = 1; i < n + 1; i++) {
-            System.out.println(student[i]);
-            if (student[i] > 0) {
-                answer++;
+        // 빌려주기
+        for (int i : reserves) {
+            if (losts.contains(i - 1)) {
+                losts.remove(i - 1);
+            } else if (losts.contains(i + 1)) {
+                losts.remove(i + 1);
             }
         }
 
+        answer = n - losts.size();
+        
         return answer;
     }
 }
