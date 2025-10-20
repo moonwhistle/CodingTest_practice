@@ -5,29 +5,28 @@ public class Solution {
     public static void main(String[] args) {
         Scanner input = new Scanner(System.in);
 
-        int testCase = input.nextInt();
+        int T = input.nextInt();
 
-        for (int t = 1; t <= testCase; t++) {
-            //setting
+        for (int i = 1; i <= T; i++) {
             int N = input.nextInt();
             long[] nums = new long[N];
-            for (int i = 0; i < N; i++) {
-                nums[i] = input.nextInt();
+
+            for (int j = 0; j < N; j++) {
+                nums[j] = input.nextInt();
             }
 
-            // 역순 탐색
+            int maxIdx = N - 1;
             long sum = 0;
-            long current = nums[N - 1];
 
-            for (int i = N - 2; i >= 0; i--) {
-                if(nums[i] > current) {
-                    current = nums[i];
+            for (int j = N - 2; j >= 0; j--) {
+                if (nums[maxIdx] < nums[j]) {
+                    maxIdx = j;
                 } else {
-                    sum += current - nums[i];
+                    sum += nums[maxIdx] - nums[j];
                 }
             }
 
-            System.out.println("#" + t + " " + sum);
+            System.out.println("#" + i + " " + sum);
         }
     }
 }
