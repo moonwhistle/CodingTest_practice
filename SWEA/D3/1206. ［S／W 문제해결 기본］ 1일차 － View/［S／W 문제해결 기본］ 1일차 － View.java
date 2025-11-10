@@ -1,31 +1,43 @@
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.util.StringTokenizer;
+import java.util.Scanner;
 
-class Solution {
-    public static void main(String args[]) throws Exception {
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+public class Solution {
 
-        int T = 10; // 항상 10개 케이스
-        for (int test_case = 1; test_case <= T; test_case++) {
-            int N = Integer.parseInt(br.readLine().trim());
-            int[] arr = new int[N];
+    public static void main(String[] args) {
+        Scanner input = new Scanner(System.in);
 
-            StringTokenizer st = new StringTokenizer(br.readLine());
-            for (int i = 0; i < N; i++) {
-                arr[i] = Integer.parseInt(st.nextToken());
+        for (int i = 1; i <= 10; i++) {
+            int N = input.nextInt();
+            int[] buildings = new int[N];
+
+            for (int j = 0; j < N; j++) {
+                buildings[j] = input.nextInt();
             }
 
-            int ans = 0;
-            for (int i = 2; i < N - 2; i++) {
-                int maxH = Math.max(
-                        Math.max(arr[i - 1], arr[i - 2]),
-                        Math.max(arr[i + 1], arr[i + 2])
-                );
-                if (arr[i] > maxH) ans += arr[i] - maxH;
-            }
-
-            System.out.println("#" + test_case + " " + ans);
+            System.out.println("#" + i + " " + goodBuildings(buildings));
         }
+    }
+
+    private static int goodBuildings(int[] buildings) {
+        int result = 0;
+
+        for (int i = 2; i < buildings.length - 2; i++) {
+            int now = buildings[i];
+            int left1 = buildings[i - 1];
+            int left2 = buildings[i - 2];
+            int right1 = buildings[i + 1];
+            int right2 = buildings[i + 2];
+
+            int minLeft = Math.min(count(now, left1), count(now, left2));
+            int minRight = Math.min(count(now, right1), count(now, right2));
+
+            result += Math.min(minLeft, minRight);
+        }
+
+        return result;
+    }
+
+    private static int count(int now, int tmp) {
+        return Math.max(now - tmp, 0);
+
     }
 }
