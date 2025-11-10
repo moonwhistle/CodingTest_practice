@@ -2,51 +2,56 @@ import java.util.Scanner;
 
 public class Solution {
 
+    static int max = Integer.MIN_VALUE;
+
     public static void main(String[] args) {
         Scanner input = new Scanner(System.in);
 
-        // setting
-        int T = 10;
+        for (int i = 1; i <= 10; i++) {
+            max = Integer.MIN_VALUE;
+            int[][] map = new int[100][100];
+            int test = input.nextInt();
 
-        for (int test = 0; test < T; test++) {
-            int[][] nums = new int[100][100];
-            int testNumber = input.nextInt();
-            int max = Integer.MIN_VALUE;
-
-            // input
-            for (int i = 0; i < 100; i++) {
-                for (int j = 0; j < 100; j++) {
-                    nums[i][j] = input.nextInt();
+            // set map
+            for (int y = 0; y < 100; y++) {
+                for (int x = 0; x < 100; x++) {
+                    map[y][x] = input.nextInt();
                 }
             }
 
-            // 행 열 합
-            for (int i = 0; i < 100; i++) {
+            // row, col
+            for (int y = 0; y < 100; y++) {
                 int rowSum = 0;
-                int columnSum = 0;
+                int colSum = 0;
 
-                for (int j = 0; j < 100; j++) {
-                    rowSum += nums[i][j];
-                    columnSum += nums[j][i];
+                for (int x = 0; x < 100; x++) {
+                    rowSum += map[y][x];
+                    colSum += map[x][y];
                 }
 
-                max = Math.max(max, rowSum);
-                max = Math.max(max, columnSum);
+                max = Math.max(rowSum, max);
+                max = Math.max(colSum, max);
             }
 
-            // 대각선의 합
-            int upCrossSum = 0;
-            int downCrossSum = 0;
+            // 대각선
+            int up = 0;
+            int down = 0;
 
-            for (int i = 0; i < 100; i++) {
-                upCrossSum += nums[i][i];
-                downCrossSum += nums[99-i][i];
+            int y = 0;
+            int x = 0;
+
+            for (int j = 0; j < 100; j++) {
+                down += map[y][x];
+                up += map[99 - y][x];
+
+                y++;
+                x++;
             }
 
-            max = Math.max(max, upCrossSum);
-            max = Math.max(max, downCrossSum);
+            max = Math.max(up, max);
+            max = Math.max(down, max);
 
-            System.out.println("#" + testNumber + " " + max);
+            System.out.println("#" + test + " " + max);
         }
     }
 }
