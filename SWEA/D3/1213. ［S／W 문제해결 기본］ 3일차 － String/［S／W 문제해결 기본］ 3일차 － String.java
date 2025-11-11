@@ -5,27 +5,27 @@ public class Solution {
     public static void main(String[] args) {
         Scanner input = new Scanner(System.in);
 
-        int T = 10;
-
-        for (int i = 0; i < T; i++) {
-            int testNumber = input.nextInt();
-
-            String target = input.next();
+        for (int i = 1; i <= 10; i++) {
+            int test = input.nextInt();
+            String given = input.next();
+            int cnt = 0;
             String line = input.next();
 
-            int sum = 0;
+            // setting
+            StringBuilder box = new StringBuilder();
+            for (int j = 0; j < line.length(); j++) {
+                box.append(line.charAt(j));
 
-            for (int j = 0; j <= line.length() - target.length(); j++) {
-                if (target.charAt(0) == line.charAt(j)) {
-                    int end = j + target.length();
-
-                    if (line.substring(j, end).equals(target)) {
-                        sum++;
+                if (box.length() == given.length()) {
+                    if (box.toString().equals(given)) {
+                        cnt++;
                     }
+
+                    box.deleteCharAt(0);
                 }
             }
 
-            System.out.println("#" + testNumber + " " + sum);
+            System.out.println("#" + test + " " + cnt);
         }
     }
 }
