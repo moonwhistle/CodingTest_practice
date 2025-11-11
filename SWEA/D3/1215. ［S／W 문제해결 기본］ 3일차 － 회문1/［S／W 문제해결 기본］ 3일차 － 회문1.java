@@ -1,63 +1,72 @@
 import java.util.Scanner;
+import javax.swing.Spring;
+import javax.swing.plaf.IconUIResource;
 
 public class Solution {
+
+    static char[][] map;
 
     public static void main(String[] args) {
         Scanner input = new Scanner(System.in);
 
-        for (int test = 0; test < 10; test++) {
-            int[][] map = new int[8][8];
+        for (int i = 1; i <= 10; i++) {
             int length = input.nextInt();
+            map = new char[8][8];
+            int cnt = 0;
 
-            for (int i = 0; i < 8; i++) {
+            for (int y = 0; y < 8; y++) {
                 String line = input.next();
-                for (int j = 0; j < 8; j++) {
-                    map[i][j] = line.charAt(j);
+                int x = 0;
+
+                for (char lineElement : line.toCharArray()) {
+                    map[y][x] = lineElement;
+                    x++;
                 }
             }
 
-            int count = 0;
+            // row
+            for (int y = 0; y < 8; y++) {
+                char[] row = map[y];
 
-            for (int i = 0; i < 8; i++) {
-                for (int j = 0; j <= 8 - length; j++) {
-                    if (isPalindromeRow(map, i, j, length)) {
-                        count++;
+                for (int x = length - 1; x < 8; x++) {
+                    int start = x - length + 1;
+
+                    if (isPan(start, x, row)) {
+                        cnt++;
                     }
                 }
             }
 
-            for (int i = 0; i <= 8 - length; i++) {
-                for (int j = 0; j < 8; j++) {
-                    if (isPalindromeColumn(map, j, i, length)) {
-                        count++;
+            // col
+            for (int x = 0; x < 8; x++) {
+                char[] col = makeCol(x);
+
+                for (int y = length - 1; y < 8; y++) {
+                    int start = y - length + 1;
+
+                    if (isPan(start, y, col)) {
+                        cnt++;
                     }
                 }
             }
 
-            System.out.println("#" + (test + 1) + " " + count);
+            System.out.println("#" + i + " " + cnt);
         }
     }
 
-    private static boolean isPalindromeRow(int[][] map, int fix, int start, int length) {
-        int end = start + length - 1;
+    private static char[] makeCol(int x) {
+        char[] line = new char[8];
 
-        while (start <= end) {
-            if (map[fix][start] != map[fix][end]) {
-                return false;
-            }
-
-            start++;
-            end--;
+        for (int i = 0; i < 8; i++) {
+            line[i] = map[i][x];
         }
 
-        return true;
+        return line;
     }
 
-    private static boolean isPalindromeColumn(int[][] map, int fix, int start, int length) {
-        int end = start + length - 1;
-
-        while (start <= end) {
-            if (map[start][fix] != map[end][fix]) {
+    private static boolean isPan(int start, int end, char[] line) {
+        while (start < end) {
+            if (line[start] != line[end]) {
                 return false;
             }
 
