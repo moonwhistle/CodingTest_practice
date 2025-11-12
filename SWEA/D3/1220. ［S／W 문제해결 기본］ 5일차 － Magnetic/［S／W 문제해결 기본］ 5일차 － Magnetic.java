@@ -3,41 +3,38 @@ import java.util.Stack;
 
 public class Solution {
 
+    static int[][] map;
+
     public static void main(String[] args) {
         Scanner input = new Scanner(System.in);
 
-        for (int T = 0; T < 10; T++) {
-            // setting
-            int row = input.nextInt();
-            int[][] map = new int[row][row];
+        for (int i = 1; i <= 10; i++) {
+            int size = input.nextInt();
+            map = new int[size][size];
 
-            for (int i = 0; i < row; i++) {
-                for (int j = 0; j < row; j++) {
-                    map[i][j] = input.nextInt();
+            for (int y = 0; y < size; y++) {
+                for (int x = 0; x < size; x++) {
+                    map[y][x] = input.nextInt();
                 }
             }
 
             int count = 0;
+            for (int x = 0; x < size; x++) {
+                Stack<Integer> stack = new Stack<>();
 
-            // 세로로 돌면서 stack 에 값을 담음
-            // stack 들어있는 값과 들어오려는 값을 비교
-            for (int x = 0; x < row; x++) {
-                int last = 0;
-
-                for (int y = 0; y < row; y++) {
-                    if (map[y][x] == 0) {
-                        continue;
+                for (int y = 0; y < size; y++) {
+                    if (map[y][x] == 1) {
+                        stack.push(1);
+                    } else if (map[y][x] == 2) {
+                        if (!stack.isEmpty() && stack.peek() == 1) {
+                            count++;
+                            stack.push(2);
+                        }
                     }
-
-                    if (last == 1 && map[y][x] == 2) {
-                        count++;
-                    }
-
-                    last = map[y][x];
                 }
             }
 
-            System.out.println("#" + (T + 1) + " " + count);
+            System.out.println("#" + i + " " + count);
         }
     }
 }
