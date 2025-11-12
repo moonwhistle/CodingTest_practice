@@ -1,6 +1,5 @@
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -12,31 +11,31 @@ public class Solution {
 
     public static void main(String[] args) {
         Scanner input = new Scanner(System.in);
-        makeNumbers();
 
         int T = input.nextInt();
+        makeMap();
 
         for (int i = 0; i < T; i++) {
-            List<Number> nums = new ArrayList<>();
             String testCase = input.next();
-            int count = input.nextInt();
+            int N = input.nextInt();
+            List<Num> nums = new ArrayList<>();
 
-            for (int j = 0; j < count; j++) {
-                String num = input.next();
-                nums.add(new Number(num, numbers.get(num)));
+            for (int j = 0; j < N; j++) {
+                String str = input.next();
+                nums.add(new Num(str, numbers.get(str)));
             }
 
             Collections.sort(nums);
 
             System.out.println(testCase);
-            for (Number number : nums) {
-                System.out.print(number.number() + " ");
+            for (Num num : nums) {
+                System.out.print(num.str() + " ");
             }
             System.out.println();
         }
     }
 
-    private static void makeNumbers() {
+    private static void makeMap() {
         numbers.put("ZRO", 0);
         numbers.put("ONE", 1);
         numbers.put("TWO", 2);
@@ -50,23 +49,23 @@ public class Solution {
     }
 }
 
-class Number implements Comparable<Number> {
+class Num implements Comparable<Num> {
 
-    private final String number;
-    private final int weight;
+    private final String str;
+    private final int value;
 
-    public Number(String number, int weight) {
-        this.number = number;
-        this.weight = weight;
+    Num(String str, int value) {
+        this.str = str;
+        this.value = value;
     }
 
     @Override
-    public int compareTo(Number other) {
-        return this.weight - other.weight;
+    public int compareTo(Num o) {
+        return this.value - o.value;
     }
 
-    public String number() {
-        return number;
+    public String str() {
+        return str;
     }
 }
 
