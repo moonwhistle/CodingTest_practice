@@ -1,32 +1,36 @@
 import java.util.Scanner;
+import java.util.Stack;
 
 public class Solution {
 
     public static void main(String[] args) {
         Scanner input = new Scanner(System.in);
 
-        for (int T = 1; T <= 10; T++) {
-            int length = input.nextInt();
-            String numbers = input.next();
+        for (int i = 1; i < 11; i++) {
+            int size = input.nextInt();
+            String line = input.next();
+            char[] lineArr = line.toCharArray();
+            Stack<Character> stack = new Stack<>();
 
-            int removeCount = 1;
-
-            while (removeCount != 0) {
-                int startIdx = 0;
-                removeCount = 0;
-
-                for (int i = 1; i < numbers.length(); i++) {
-                    if (numbers.charAt(startIdx) == numbers.charAt(i)) {
-                        removeCount++;
-                        numbers = numbers.substring(0, startIdx) + numbers.substring(i + 1);
-                        break;
+            for (char lineElement : lineArr) {
+                if (stack.empty()) {
+                    stack.add(lineElement);
+                } else {
+                    if (stack.peek() == lineElement) {
+                        stack.pop();
+                    } else {
+                        stack.add(lineElement);
                     }
-
-                    startIdx++;
                 }
             }
 
-            System.out.println("#" + T + " " + numbers);
+            String answer = "";
+
+            for (char stackElement : stack) {
+                answer += stackElement;
+            }
+
+            System.out.println("#" + i + " " + answer);
         }
     }
 }
