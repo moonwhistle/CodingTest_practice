@@ -1,5 +1,4 @@
 import java.util.Scanner;
-import java.util.Stack;
 
 public class Solution {
 
@@ -9,28 +8,23 @@ public class Solution {
         for (int i = 1; i < 11; i++) {
             int size = input.nextInt();
             String line = input.next();
-            char[] lineArr = line.toCharArray();
-            Stack<Character> stack = new Stack<>();
+            boolean isSame = true;
 
-            for (char lineElement : lineArr) {
-                if (stack.empty()) {
-                    stack.add(lineElement);
-                } else {
-                    if (stack.peek() == lineElement) {
-                        stack.pop();
-                    } else {
-                        stack.add(lineElement);
+            while (isSame) {
+                isSame = false;
+
+                for (int j = 1; j < line.length(); j++) {
+                    if (line.charAt(j - 1) == line.charAt(j)) {
+                        String leftPart = line.substring(0, j - 1);
+                        String rightPart = line.substring(j + 1);
+                        line = leftPart + rightPart;
+                        isSame = true;
+                        break;
                     }
                 }
             }
 
-            String answer = "";
-
-            for (char stackElement : stack) {
-                answer += stackElement;
-            }
-
-            System.out.println("#" + i + " " + answer);
+            System.out.println("#" + i + " " + line);
         }
     }
 }
