@@ -1,25 +1,28 @@
+import java.util.Queue;
 import java.util.Stack;
 
 class Solution {
-
-    public static boolean solution(String s) {
+    boolean solution(String s) {
         boolean answer = true;
-        //세팅
-        Stack<Character> stack = new Stack<>();
 
-        for(int i = 0; i<s.length(); i++) {
-            if(s.charAt(i) == '(') {
-                stack.add(s.charAt(i));
+        char[] sArray = s.toCharArray();
+        Stack<Character> box = new Stack<>();
+
+        for (int i = 0; i < s.length(); i++) {
+            if (sArray[i] == '(') {
+                box.add(sArray[i]);
             } else {
-                if(stack.isEmpty()) {
-                    return false;
+                if (box.isEmpty()) {
+                    answer = false;
+                    break;
+                } else if (box.peek() == '(') {
+                    box.pop();
                 }
-                stack.pop();
             }
         }
 
-        if(!stack.isEmpty()) {
-            return false;
+        if (!box.isEmpty()) {
+            answer = false;
         }
 
         return answer;
