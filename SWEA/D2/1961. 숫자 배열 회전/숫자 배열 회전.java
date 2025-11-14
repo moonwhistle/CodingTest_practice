@@ -1,73 +1,99 @@
-import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Solution {
-    static Scanner input = new Scanner(System.in);
+
+    static int[][] map;
 
     public static void main(String[] args) {
+        Scanner input = new Scanner(System.in);
+
         int T = input.nextInt();
 
-        for (int testCase = 1; testCase <= T; testCase++) {
-            int size = input.nextInt();
+        for (int i = 1; i <= T; i++) {
+            int N = input.nextInt();
+            map = new int[N][N];
 
-            int[][] map = new int[size][size];
-            makeMap(map);
-
-            ArrayList<String>[] answer = new ArrayList[size];
-            for (int i = 0; i < size; i++) {
-                answer[i] = new ArrayList<String>();
-            }
-
-            for (int i = 0; i < 3; i++) {
-                transpose(map, size);
-                reverseRow(map, size);
-
-                for (int row = 0; row < size; row++) {
-                    String lineElement = "";
-
-                    for (int col = 0; col < size; col++) {
-                        lineElement += map[row][col];
-                    }
-
-                    answer[row].add(lineElement);
+            for (int y = 0; y < N; y++) {
+                for (int x = 0; x < N; x++) {
+                    map[y][x] = input.nextInt();
                 }
             }
 
-            // 출력
-            System.out.println("#" + testCase + " ");
-            for (int i = 0; i < size; i++) {
-                for (int j = 0; j < 3; j++) {
-                    System.out.print(answer[i].get(j) + " ");
+            String[][] result = new String[N][3];
+
+            // 90
+            transpose(N);
+            reverseRow(N);
+
+            for (int y = 0; y < N; y++) {
+                int[] line = map[y];
+
+                String lineResult = "";
+                for (int lineElement : line) {
+                    lineResult += lineElement;
                 }
-                System.out.println();
+
+                result[y][0] = lineResult;
+            }
+
+            // 180
+            transpose(N);
+            reverseRow(N);
+
+            for (int y = 0; y < N; y++) {
+                int[] line = map[y];
+
+                String lineResult = "";
+                for (int lineElement : line) {
+                    lineResult += lineElement;
+                }
+
+                result[y][1] = lineResult;
+            }
+
+            // 270
+            transpose(N);
+            reverseRow(N);
+
+            for (int y = 0; y < N; y++) {
+                int[] line = map[y];
+
+                String lineResult = "";
+                for (int lineElement : line) {
+                    lineResult += lineElement;
+                }
+
+                result[y][2] = lineResult;
+            }
+
+            System.out.println("#" + i);
+            for (int y = 0; y < N; y++) {
+                System.out.println(result[y][0] + " " + result[y][1] + " " + result[y][2]);
             }
         }
     }
 
-    private static void makeMap(int[][] map) {
-        for (int i = 0; i < map.length; i++) {
-            for (int j = 0; j < map[i].length; j++) {
-                map[i][j] = input.nextInt();
+    private static void transpose(int N) {
+        for (int y = 0; y < N; y++) {
+            for (int x = y + 1; x < N; x++) {
+                int temp = map[y][x];
+                map[y][x] = map[x][y];
+                map[x][y] = temp;
             }
         }
     }
 
-    private static void transpose(int[][] map, int size) {
-        for (int i = 0; i < size; i++) {
-            for (int j = i + 1; j < size; j++) {
-                int tmp = map[i][j];
-                map[i][j] = map[j][i];
-                map[j][i] = tmp;
-            }
-        }
-    }
+    private static void reverseRow(int N) {
+        for (int y = 0; y < N; y++) {
+            int start = 0;
+            int end = N - 1;
 
-    private static void reverseRow(int[][] map, int size) {
-        for (int i = 0; i < size; i++) {
-            for (int j = 0; j < size / 2; j++) {
-                int tmp = map[i][j];
-                map[i][j] = map[i][size - j - 1];
-                map[i][size - j - 1] = tmp;
+            while (start < end) {
+                int temp = map[y][start];
+                map[y][start] = map[y][end];
+                map[y][end] = temp;
+                start++;
+                end--;
             }
         }
     }
