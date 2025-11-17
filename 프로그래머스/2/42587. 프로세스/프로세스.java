@@ -5,39 +5,57 @@ import java.util.Queue;
 
 class Solution {
 
+    public static void main(String[] args) {
+        solution(new int[]{1, 1, 9, 1, 1, 1}, 0);
+    }
+
     public static int solution(int[] priorities, int location) {
         int answer = 0;
-        //세팅
-        int size = priorities.length;
-        Queue<Integer> locationQueue = new LinkedList<>();
-        for(int i = 0; i<size; i++) {
-            if(location == i) {
-                locationQueue.add(1);
-            } else {
-                locationQueue.add(0);
-            }
-        }
-        PriorityQueue<Integer> max = new PriorityQueue<>(Comparator.reverseOrder());
-        Queue<Integer> priorityQueue = new LinkedList<>();
-        for(int priority : priorities) {
-            max.add(priority);
-            priorityQueue.add(priority);
+        PriorityQueue<Integer> queue = new PriorityQueue<>(Comparator.reverseOrder());
+        Queue<Process> prioprityQueue = new LinkedList<>();
+
+        for (int i = 0; i < priorities.length; i++) {
+            queue.add(priorities[i]);
+            prioprityQueue.add(new Process(priorities[i], i));
         }
 
-        //로직
-        while (locationQueue.contains(1)) {
-            int process = priorityQueue.poll();
-            int now = locationQueue.poll();
+        int count = 1;
 
-            if(process == max.peek()) {
-                answer++;
-                max.poll();
+        while (!prioprityQueue.isEmpty()) {
+            Process poll = prioprityQueue.poll();
+
+            if (poll.priority() == queue.peek()) {
+                if (poll.sequence() == location) {
+                    answer = count;
+                    break;
+                } else {
+                    queue.poll();
+                    count++;
+                }
             } else {
-                priorityQueue.add(process);
-                locationQueue.add(now);
+                prioprityQueue.add(poll);
             }
         }
 
         return answer;
+    }
+}
+
+class Process {
+
+    private final int priority;
+    private final int sequence;
+
+    Process(int priority, int sequence) {
+        this.priority = priority;
+        this.sequence = sequence;
+    }
+
+    public int priority() {
+        return this.priority;
+    }
+
+    public int sequence() {
+        return this.sequence;
     }
 }
