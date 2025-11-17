@@ -2,52 +2,50 @@ import java.util.Scanner;
 
 public class Solution {
 
-    private static int[] dx = {1, 0, -1, 0};
-    private static int[] dy = {0, 1, 0, -1};
+	static int[][] map;
+	static int[] dx = { 1, 0, -1, 0 };
+	static int[] dy = { 0, 1, 0, -1 };
 
-    public static void main(String[] args) {
-        Scanner input = new Scanner(System.in);
+	public static void main(String[] args) {
+		Scanner input = new Scanner(System.in);
 
-        int T = input.nextInt();
+		int testCase = input.nextInt();
 
-        for (int i = 1; i <= T; i++) {
-            int N = input.nextInt();
-            int[][] map = new int[N][N];
-            makeMap(map, N);
+		for (int i = 1; i <= testCase; i++) {
+			int N = input.nextInt();
+			map = new int[N][N];
 
-            System.out.println("#" + i);
-            for (int[] line : map) {
-                for (int lineElement : line) {
-                    System.out.print(lineElement + " ");
-                }
-                System.out.println();
-            }
-        }
-    }
+			makeMap(N);
 
-    private static void makeMap(int[][] map, int N) {
-        int max = N * N;
+			System.out.println("#" + i);
+			for (int y = 0; y < N; y++) {
+				for (int x = 0; x < N; x++) {
+					System.out.print(map[y][x] + " ");
+				}
+				System.out.println();
+			}
+		}
+	}
 
-        int x = 0;
-        int y = 0;
-        int i = 1;
-        int direction = 0;
+	private static void makeMap(int N) {
+		int i = 1;
+		int x = 0;
+		int y = 0;
+		int mode = 0;
 
-        while (i <= max) {
-            map[y][x] = i;
-            i++;
+		while (i <= N * N) {
+			map[y][x] = i;
+			i++;
 
-            int nowX = x + dx[direction];
-            int nowY = y + dy[direction];
-
-            if (nowY < 0 || nowX < 0 || nowX >= N || nowY >= N || map[nowY][nowX] != 0) {
-                direction = (direction + 1) % 4;
-                nowX = x + dx[direction];
-                nowY = y + dy[direction];
-            }
-
-            x = nowX;
-            y = nowY;
-        }
-    }
+			if (x + dx[mode] < N && y + dy[mode] < N && x + dx[mode] >= 0 && y + dy[mode] >= 0
+					&& map[y + dy[mode]][x + dx[mode]] == 0) {
+				x += dx[mode];
+				y += dy[mode];
+			} else {
+				mode = (mode + 1) % 4;
+				x += dx[mode];
+				y += dy[mode];
+			}
+		}
+	}
 }
