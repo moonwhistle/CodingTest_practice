@@ -1,70 +1,62 @@
-import java.util.Map;
 import java.util.Scanner;
 
 public class Solution {
 
-    static int maxScore;
+	static int max;
+	static Burger[] burgers;
 
-    public static void main(String[] args) {
-        Scanner input = new Scanner(System.in);
+	public static void main(String[] args) {
+		Scanner input = new Scanner(System.in);
 
-        int T = input.nextInt();
+		int testCase = input.nextInt();
 
-        for (int i = 1; i <= T; i++) {
-            int ingredient = input.nextInt();
-            int maxCalorie = input.nextInt();
-            maxScore = 0;
-            Food[] foods = new Food[ingredient];
-            boolean[] visited = new boolean[ingredient];
+		for (int i = 1; i <= testCase; i++) {
+			int N = input.nextInt();
+			int L = input.nextInt();
+			max = Integer.MIN_VALUE;
+			burgers = new Burger[N];
 
-            for (int j = 0; j < ingredient; j++) {
-                int score = input.nextInt();
-                int calorie = input.nextInt();
-                foods[j] = new Food(score, calorie);
-            }
+			for (int j = 0; j < N; j++) {
+				int flavor = input.nextInt();
+				int calory = input.nextInt();
 
-            btk(foods, maxCalorie, 0, 0, visited, 0);
+				burgers[j] = new Burger(flavor, calory);
+			}
 
-            System.out.println("#" + i + " " + maxScore);
-        }
-    }
+			findMax(0, L, 0, N, 0);
 
-    private static void btk(Food[] foods, int maxCalorie, int calorie, int score, boolean[] visited, int start) {
-        if (calorie > maxCalorie) {
-            return;
-        }
+			System.out.println("#" + i + " " + max);
+		}
+	}
 
-        maxScore = Math.max(score, maxScore);
+	private static void findMax(int nowCalory, int maxCalory, int nowFlavor, int N, int start) {
+		if (nowCalory > maxCalory) {
+			return;
+		}
 
-        for (int i = start; i < foods.length; i++) {
-            if (!visited[i]) {
-                visited[i] = true;
-                calorie += foods[i].calorie();
-                score += foods[i].score();
-                btk(foods, maxCalorie, calorie, score, visited, i);
-                visited[i] = false;
-                calorie -= foods[i].calorie();
-                score -= foods[i].score();
-            }
-        }
-    }
+		max = Math.max(max, nowFlavor);
+
+		for (int i = start; i < N; i++) {
+			findMax(nowCalory + burgers[i].calory(), maxCalory, nowFlavor + burgers[i].flavor(), N, i + 1);
+		}
+	}
 }
 
-class Food {
+class Burger {
 
-    private final int score;
-    private final int calorie;
+	private final int flavor;
+	private final int calory;
 
-    public Food(int score, int calorie) {
-        this.score = score;
-        this.calorie = calorie;
-    }
+	public Burger(int flavor, int calory) {
+		this.flavor = flavor;
+		this.calory = calory;
+	}
 
-    public int score() {
-        return score;
-    }
+	public int flavor() {
+		return this.flavor;
+	}
 
-    public int calorie() {
-        return calorie;
-    }
+	public int calory() {
+		return this.calory;
+	}
 }
