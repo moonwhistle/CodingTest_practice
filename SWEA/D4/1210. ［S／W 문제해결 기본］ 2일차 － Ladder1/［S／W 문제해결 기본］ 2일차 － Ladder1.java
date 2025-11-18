@@ -1,58 +1,57 @@
+
 import java.util.Scanner;
 
-public class Solution {
+class Solution {
 
-    static int start;
-    static int[] dx = {1, -1, 0};
-    static int[] dy = {0, 0, -1};
+	static int[][] map;
+	static int[] dx = { 1, -1, 0 };
+	static int[] dy = { 0, 0, -1 };
+	static boolean[][] visited;
+	static int arrivedX;
 
-    public static void main(String[] args) {
-        Scanner input = new Scanner(System.in);
+	public static void main(String[] args) {
+		Scanner input = new Scanner(System.in);
 
-        for (int i = 0; i < 10; i++) {
-            int testCase = input.nextInt();
-            int[][] map = new int[100][100];
+		for (int i = 0; i < 10; i++) {
+			int testCase = input.nextInt();
+			map = new int[100][100];
+			visited = new boolean[100][100];
 
-            // set map
-            for (int y = 0; y < 100; y++) {
-                for (int x = 0; x < 100; x++) {
-                    map[y][x] = input.nextInt();
-                }
-            }
+			int startY = 0;
+			int startX = 0;
 
-            // 도착점
-            int startX = 0;
-            for (int x = 0; x < 100; x++) {
-                if (map[99][x] == 2) {
-                    startX = x;
-                    break;
-                }
-            }
+			for (int y = 0; y < 100; y++) {
+				for (int x = 0; x < 100; x++) {
+					map[y][x] = input.nextInt();
 
-            // start dfs
-            boolean[][] visited = new boolean[100][100];
-            dfs(startX, 99, visited, map);
+					if (map[y][x] == 2) {
+						startX = x;
+						startY = y;
+					}
+				}
+			}
 
-            System.out.println("#" + testCase + " " + start);
-        }
-    }
+			dfs(startY, startX);
 
-    private static void dfs(int x, int y, boolean[][] visited, int[][] map) {
-        if (y == 0) {
-            start = x;
-            return;
-        }
+			System.out.println("#" + testCase + " " + arrivedX);
+		}
+	}
 
-        visited[y][x] = true;
+	private static void dfs(int startY, int startX) {
+		if (startY == 0) {
+			arrivedX = startX;
+		}
 
-        for (int i = 0; i < 3; i++) {
-            int nowX = x + dx[i];
-            int nowY = y + dy[i];
+		visited[startY][startX] = true;
 
-            if (nowX >= 0 && nowX < 100 && nowY >= 0 && nowY < 100 && !visited[nowY][nowX] && map[nowY][nowX] == 1) {
-                dfs(nowX, nowY, visited, map);
-                return;
-            } 
-        }
-    }
+		for (int i = 0; i < 3; i++) {
+			int x = dx[i] + startX;
+			int y = dy[i] + startY;
+
+			if (x >= 0 && y >= 0 && x < 100 && y < 100 && !visited[y][x] && map[y][x] == 1) {
+				dfs(y, x);
+                break;
+			}
+		}
+	}
 }
