@@ -2,33 +2,31 @@ import java.util.LinkedList;
 import java.util.Queue;
 
 class Solution {
-    static Queue<Truck> bridge = new LinkedList<>();
-    static Queue<Truck> waiting = new LinkedList<>();
-
-    public static void main(String[] args) {
-        solution(2, 10, new int[]{7, 4, 5, 6});
-    }
-
+    
     public static int solution(int bridge_length, int weight, int[] truck_weights) {
         int answer = 0;
-        setting(truck_weights);
+        Queue<Truck> trucks = new LinkedList<>();
+        Queue<Truck> bridge = new LinkedList<>();
+        for (int truck_weight : truck_weights) {
+            trucks.add(new Truck(truck_weight, 0));
+        }
 
-        int currentWeight = 0;
-        while (!bridge.isEmpty() || !waiting.isEmpty()) {
-            for (Truck truck : bridge) {
-                truck.move();
-            }
-
-            if (!bridge.isEmpty() && bridge.peek().place > bridge_length) {
+        int bridgeWeight = 0;
+        while (!trucks.isEmpty() || !bridge.isEmpty()) {
+            if (!bridge.isEmpty() && bridge.peek().place() >= bridge_length) {
                 Truck truck = bridge.poll();
-                currentWeight -= truck.weight;
+                bridgeWeight -= truck.weight();
             }
 
-            if (!waiting.isEmpty() && currentWeight + waiting.peek().weight <= weight) {
-                Truck truck = waiting.poll();
-                truck.move();
+            for (Truck truck : bridge) {
+                truck.add();
+            }
+
+            if (!trucks.isEmpty() && trucks.peek().weight() + bridgeWeight <= weight) {
+                Truck truck = trucks.poll();
+                truck.add();
+                bridgeWeight += truck.weight();
                 bridge.add(truck);
-                currentWeight += truck.weight;
             }
 
             answer++;
@@ -37,24 +35,28 @@ class Solution {
         System.out.println(answer);
         return answer;
     }
-
-    private static void setting(int[] truck_weights) {
-        for (int i : truck_weights) {
-            waiting.add(new Truck(0, i));
-        }
-    }
 }
 
 class Truck {
-    int place;
-    int weight;
 
-    public Truck(int place, int weight) {
+    private final int weight;
+    private int place;
+
+
+    Truck(int weight, int place) {
         this.weight = weight;
         this.place = place;
     }
 
-    public void move() {
+    public int weight() {
+        return this.weight;
+    }
+
+    public int place() {
+        return this.place;
+    }
+
+    public void add() {
         this.place++;
     }
 }
