@@ -1,43 +1,51 @@
+
 import java.util.Scanner;
 
-public class Solution {
+class Solution {
 
-    public static void main(String[] args) {
-        Scanner input = new Scanner(System.in);
+	static int[][] map;
+	static Scanner input = new Scanner(System.in);
 
-        int T = input.nextInt();
+	public static void main(String[] args) {
 
-        for (int test = 1; test <= T; test++) {
-            // setting
-            int N = input.nextInt();
-            int[][] map = new int[N][N];
+		int T = input.nextInt();
 
-            for (int i = 0; i < N; i++) {
-                String line = input.next();
-                int x = 0;
+		for (int i = 1; i <= T; i++) {
+			int N = input.nextInt();
+			int startY = N / 2;
+			int sum = 0;
 
-                for (String lineElement : line.split("")) {
-                    map[i][x] = Integer.parseInt(lineElement);
-                    x++;
-                }
-            }
+			map = new int[N][N];
+			setMap(N);
 
-            int sum = 0;
-            int cnt = 0;
+			int count = 0;
+			for (int y = startY; y < N; y++) {
+				for (int x = count; x < N - count; x++) {
+					if (y == startY) {
+						sum += map[startY][x];
+					} else {
+						sum += map[startY + count][x];
+						sum += map[startY - count][x];
+					}
+				}
 
-            for (int i = N / 2; i >= 0; i--) {
-                for (int j = cnt; j < N - cnt; j++) {
-                    if (cnt != 0) {
-                        sum += map[(N / 2) + cnt][j];
-                    }
+				count++;
+			}
 
-                    sum += map[i][j];
-                }
+			System.out.println("#" + i + " " + sum);
+		}
+	}
 
-                cnt++;
-            }
+	private static void setMap(int N) {
+		for (int i = 0; i < N; i++) {
+			String line = input.next();
 
-            System.out.println("#" + test + " " + sum);
-        }
-    }
+			int x = 0;
+
+			for (char lineElement : line.toCharArray()) {
+				map[i][x] = lineElement - '0';
+				x++;
+			}
+		}
+	}
 }
