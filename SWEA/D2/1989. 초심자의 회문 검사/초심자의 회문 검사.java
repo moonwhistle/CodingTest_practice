@@ -1,34 +1,36 @@
 import java.util.Scanner;
 
-public class Solution {
+class Solution {
 
-    public static void main(String[] args) {
-        Scanner input = new Scanner(System.in);
+	public static void main(String[] args) {
+		Scanner input = new Scanner(System.in);
 
-        int T = input.nextInt();
+		int T = input.nextInt();
 
-        for (int i = 1; i <= T; i++) {
-            String word = input.next();
+		for (int i = 1; i <= T; i++) {
+			String line = input.next();
 
-            int start = 0;
-            int end = word.length() - 1;
-            boolean isPan = true;
+			if (isPalindrome(line.toCharArray())) {
+				System.out.println("#" + i + " " + 1);
+			} else {
+				System.out.println("#" + i + " " + 0);
+			}
+		}
+	}
 
-            while (start < end) {
-                if (word.charAt(start) != word.charAt(end)) {
-                    isPan = false;
-                    break;
-                }
+	private static boolean isPalindrome(char[] lineArr) {
+		int start = 0;
+		int end = lineArr.length - 1;
 
-                start++;
-                end--;
-            }
+		while (start < end) {
+			if (lineArr[start] != lineArr[end]) {
+				return false;
+			}
+			
+			start++;
+			end--;
+		}
 
-            if (isPan) {
-                System.out.println("#" + i + " " + 1);
-            } else {
-                System.out.println("#" + i + " " + 0);
-            }
-        }
-    }
+		return true;
+	}
 }
