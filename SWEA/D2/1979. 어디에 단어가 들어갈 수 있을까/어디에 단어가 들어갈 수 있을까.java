@@ -1,68 +1,82 @@
+
 import java.util.Scanner;
 
-public class Solution {
+class Solution {
 
-    static int[][] map;
-    static int cnt = 0;
-    static int answer;
+	static int[][] map;
+	static boolean[][] visitedRow;
+	static boolean[][] visitedCol;
+	static int count;
 
-    public static void main(String[] args) {
-        Scanner input = new Scanner(System.in);
+	public static void main(String[] args) {
+		Scanner input = new Scanner(System.in);
 
-        int T = input.nextInt();
+		int T = input.nextInt();
 
-        for (int i = 1; i <= T; i++) {
-            int N = input.nextInt();
-            int K = input.nextInt();
+		for (int i = 1; i <= T; i++) {
+			int N = input.nextInt();
+			int size = input.nextInt();
+			count = 0;
 
-            map = new int[N][N];
-            answer = 0;
+			map = new int[N][N];
+			visitedRow = new boolean[N][N];
+			visitedCol = new boolean[N][N];
 
-            for (int y = 0; y < N; y++) {
-                for (int x = 0; x < N; x++) {
-                    map[y][x] = input.nextInt();
-                }
-            }
+			for (int y = 0; y < N; y++) {
+				for (int x = 0; x < N; x++) {
+					map[y][x] = input.nextInt();
+				}
+			}
 
-            for (int y = 0; y < N; y++) {
-                for (int x = 0; x < N; x++) {
-                    if (map[y][x] == 1) {
-                        cnt++;
-                    } else {
-                        if (cnt == K) {
-                            answer++;
-                        }
+			for (int y = 0; y < N; y++) {
+				for (int x = 0; x < N; x++) {
+					if (map[y][x] == 1 && !visitedRow[y][x]) {
+						visitedRow[y][x] = true;
+						row(map, x, y, N, size);
+					}
 
-                        cnt = 0;
-                    }
-                }
+					if (map[y][x] == 1 && !visitedCol[y][x]) {
+						visitedCol[y][x] = true;
+						col(map, x, y, N, size);
+					}
+				}
+			}
 
-                if (cnt == K) {
-                    answer++;
-                }
-                cnt = 0;
-            }
+			System.out.println("#" + i + " " + count);
+		}
+	}
 
-            for (int y = 0; y < N; y++) {
-                for (int x = 0; x < N; x++) {
-                    if (map[x][y] == 1) {
-                        cnt++;
-                    } else {
-                        if (cnt == K) {
-                            answer++;
-                        }
+	private static void row(int[][] map, int x, int y, int N, int size) {
+		int cnt = 0;
 
-                        cnt = 0;
-                    }
-                }
+		for (int row = x; row < N; row++) {
+			if (map[y][row] == 1) {
+				visitedRow[y][row] = true;
+				cnt++;
+			} else {
+				break;
+			}
+		}
 
-                if (cnt == K) {
-                    answer++;
-                }
-                cnt = 0;
-            }
+		if (cnt == size) {
+			count++;
+		}
+	}
 
-            System.out.println("#" + i + " " + answer);
-        }
-    }
+	private static void col(int[][] map, int x, int y, int N, int size) {
+		int cnt = 0;
+
+		for (int col = y; col < N; col++) {
+			if (map[col][x] == 1) {
+				visitedCol[col][x] = true;
+				cnt++;
+			} else {
+				break;
+			}
+		}
+
+		if (cnt == size) {
+			count++;
+		}
+	}
 }
