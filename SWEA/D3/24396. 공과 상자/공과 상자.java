@@ -1,60 +1,52 @@
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
 import java.util.Scanner;
 
-public class Solution {
+class Solution {
 
-    public static void main(String[] args) {
-        Scanner input = new Scanner(System.in);
+	public static void main(String[] args) {
+		Scanner input = new Scanner(System.in);
 
-        int T = input.nextInt();
+		int T = input.nextInt();
 
-        for (int i = 0; i < T; i++) {
-            int B = input.nextInt();
-            int W = input.nextInt();
+		for (int i = 1; i <= T; i++) {
+			int B = input.nextInt();
+			int W = input.nextInt();
+			int X = input.nextInt();
+			int Y = input.nextInt();
+			int Z = input.nextInt();
+			int max = Integer.MIN_VALUE;
+			int ball = 0;
+			boolean isB = false;
+			boolean isW = false;
 
-            int X = input.nextInt();
-            int Y = input.nextInt();
-            int Z = input.nextInt();
+			if (B >= W) {
+				ball = W;
+				isW = true;
+			} else {
+				ball = B;
+				isB = true;
+			}
 
-            List<Ball> balls = new ArrayList<>();
-            balls.add(new Ball(B, X));
-            balls.add(new Ball(W, Y));
+			while (ball >= 0) {
+				if (isB) {
+					int reverse = B - ball;
+					int sumBlack = ball * X;
+					int sumWhite = (W - reverse) * Y;
+					int reverseSum = reverse * Z * 2;
 
-            Collections.sort(balls);
+					max = Math.max(max, sumBlack + sumWhite + reverseSum);
+				} else {
+					int reverse = W - ball;
+					int sumBlack = (B - reverse) * X;
+					int sumWhite = ball * Y;
+					int reverseSum = reverse * Z * 2;
 
-            Ball max = balls.get(1);
-            Ball min = balls.get(0);
+					max = Math.max(max, sumBlack + sumWhite + reverseSum);
+				}
 
-            int[] sums = new int[min.count + 1];
-            sums[0] = (max.count * max.score) + (min.count * min.score);
-            int cnt = 1;
+				ball--;
+			}
 
-            for (int j = 1; j <= min.count; j++) {
-                sums[j] = sums[j - 1] - (max.score * cnt) - (min.score * cnt) + (cnt * 2 * Z);
-            }
-
-            Arrays.sort(sums);
-
-            System.out.println(sums[min.count]);
-        }
-    }
-}
-
-class Ball implements Comparable<Ball> {
-
-    int count;
-    int score;
-
-    public Ball(int count, int score) {
-        this.count = count;
-        this.score = score;
-    }
-
-    @Override
-    public int compareTo(Ball other) {
-        return this.count - other.count;
-    }
+			System.out.println(max);
+		}
+	}
 }
