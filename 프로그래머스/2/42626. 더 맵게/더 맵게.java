@@ -1,25 +1,25 @@
 import java.util.PriorityQueue;
 
 class Solution {
+    public int solution(int[] scoville, int K) {
+        int answer = 0;
+        PriorityQueue<Integer> pq = new PriorityQueue<>();
 
-    public static int solution(int[] scoville, int K) {
-        PriorityQueue<Integer> queue = new PriorityQueue<>();
-        for (int num : scoville) {
-            queue.add(num);
+        for (int scov : scoville) {
+            pq.add(scov);
         }
 
-        int count = 0;
-
-        while (queue.peek() < K) {
-            if(queue.size() == 1) {
-                return -1;
-            }
-            count++;
-            int first = queue.poll();
-            int second = queue.poll();
-            int newScoville = first + (second * 2);
-            queue.add(newScoville);
+        while (pq.peek() < K && pq.size() >= 2) {
+            int first = pq.poll();
+            int second = pq.poll();
+            pq.add(first + second * 2);
+            answer++;
         }
-        return count;
+
+        if (pq.peek() < K) {
+            answer = -1;
+        }
+
+        return answer;
     }
 }
