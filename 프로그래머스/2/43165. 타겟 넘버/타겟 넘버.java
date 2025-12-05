@@ -1,25 +1,26 @@
 class Solution {
-    static int count = 0;
-    
-    public static int solution(int[] numbers, int target) {
-        dfs(numbers, target, 0, 0);
-        return count;
+
+    static int result = 0;
+
+    public static void main(String[] args) {
+        solution(new int[]{1, 1, 1, 1, 1}, 3);
     }
 
-    public static void dfs(int[] numbers, int target, int depth, int sum) {
-        if (numbers.length == depth) {
+    public static int solution(int[] numbers, int target) {
+        btk(numbers, target, 0, 0);
+        return result;
+    }
+
+    private static void btk(int[] numbers, int target, int idx, int sum) {
+        if (idx == numbers.length) {
             if (sum == target) {
-                count++;
-                return;
-            } else {
-                return;
+                result++;
             }
+
+            return;
         }
 
-        int plus = sum + numbers[depth];
-        int minus = sum - numbers[depth];
-
-        dfs(numbers, target, depth + 1, plus);
-        dfs(numbers, target, depth + 1, minus);
+        btk(numbers, target, idx + 1, sum + numbers[idx]);
+        btk(numbers, target, idx + 1, sum - numbers[idx]);
     }
 }
