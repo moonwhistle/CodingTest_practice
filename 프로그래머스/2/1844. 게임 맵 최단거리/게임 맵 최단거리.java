@@ -2,41 +2,56 @@ import java.util.LinkedList;
 import java.util.Queue;
 
 class Solution {
-    
-    int[] dx = {0, 1, 0, -1};
-    int[] dy = {1, 0, -1, 0};
-    boolean[][] visited;
-    
-    public int solution(int[][] maps) {
-        visited = new boolean[maps.length][maps[0].length];
-        bfs(maps);
-        if(maps[maps.length-1][maps[0].length-1] == 1) {
-            return -1;
-        } else {
-            return maps[maps.length-1][maps[0].length-1];
-        }
-    }
 
-    public void bfs(int[][] maps) {
-        Queue<int[]> index = new LinkedList<>();
-        index.offer(new int[]{0, 0});
+    static int[] dx = {1, 0, -1, 0};
+    static int[] dy = {0, 1, 0, -1};
+    static boolean[][] visited;
+
+    public int solution(int[][] maps) {
+        int answer = Integer.MAX_VALUE;
+        visited = new boolean[maps.length][maps[0].length];
+
+        Queue<Point> queue = new LinkedList<>();
+        queue.add(new Point(0, 0, 1));
         visited[0][0] = true;
 
-        while (!index.isEmpty()) {
-            int[] now = index.poll();
+        while (!queue.isEmpty()) {
+            Point poll = queue.poll();
+
+            if (poll.x == maps[0].length - 1 && poll.y == maps.length - 1) {
+                answer = Math.min(answer, poll.count);
+            }
 
             for (int i = 0; i < 4; i++) {
-                int x = now[0] + dx[i];
-                int y = now[1] + dy[i];
+                int x = poll.x + dx[i];
+                int y = poll.y + dy[i];
 
-                if (x >= 0 && x < maps.length && y >= 0 && y < maps[0].length) {
-                    if (!visited[x][y] && maps[x][y] == 1) {
-                        visited[x][y] = true;
-                        index.add(new int[]{x, y});
-                        maps[x][y] = maps[now[0]][now[1]] + 1;
+                if (x >= 0 && y >= 0 && x < maps[0].length && y < maps.length && maps[y][x] == 1) {
+                    if (!visited[y][x]) {
+                        visited[y][x] = true;
+                        queue.add(new Point(x, y, poll.count + 1));
                     }
                 }
             }
         }
+
+        if (answer == Integer.MAX_VALUE) {
+            return -1;
+        }
+
+        return answer;
+    }
+}
+
+class Point {
+
+    int x;
+    int y;
+    int count;
+
+    public Point(int x, int y, int count) {
+        this.x = x;
+        this.y = y;
+        this.count = count;
     }
 }
