@@ -1,11 +1,9 @@
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
 
 class Solution {
-
-    public static String solution(int[] numbers) {
+    public String solution(int[] numbers) {
         String answer = "";
         List<Num> nums = new ArrayList<>();
 
@@ -15,12 +13,14 @@ class Solution {
 
         Collections.sort(nums);
 
-        if (Objects.equals(nums.get(0).number, "0")) {
-            return "0";
-        }
+        for (int i = 0; i < nums.size(); i++) {
+            String num = nums.get(i).num;
 
-        for (Num num : nums) {
-            answer += num.number;
+            if (i == 0 && num.equals("0")) {
+                return num;
+            }
+
+            answer += num;
         }
 
         return answer;
@@ -29,14 +29,14 @@ class Solution {
 
 class Num implements Comparable<Num> {
 
-    String number;
+    String num;
 
-    public Num(String number) {
-        this.number = number;
+    public Num(String num) {
+        this.num = num;
     }
 
     @Override
-    public int compareTo(Num other) {
-        return (other.number + this.number).compareTo(this.number + other.number);
+    public int compareTo(Num o) {
+        return (o.num + this.num).compareTo(this.num + o.num);
     }
 }
