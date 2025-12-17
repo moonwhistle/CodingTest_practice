@@ -6,47 +6,44 @@ class Solution {
     static boolean[] visited;
     static int cnt;
 
-    public int solution(int n, int[][] wires) {
+    public static int solution(int n, int[][] wires) {
         int answer = Integer.MAX_VALUE;
-        map = new ArrayList[n + 1];
-
-        for (int i = 1; i < n + 1; i++) {
-            map[i] = new ArrayList<>();
-        }
+        setMap(n, wires);
 
         for (int[] wire : wires) {
-            int start = wire[0];
-            int end = wire[1];
-
-            map[start].add(end);
-            map[end].add(start);
-        }
-
-        for (int[] wire : wires) {
-            int start = wire[0];
-            int end = wire[1];
             visited = new boolean[n + 1];
-            cnt = 1;
-            dfs(1, start, end);
-            int minus = Math.abs(cnt - (n - cnt));
-            answer = Math.min(minus, answer);
+            cnt = 0;
+            dfs(wire[0], wire[1]);
+            answer = Math.min(Math.abs(n - cnt - cnt), answer);
         }
 
         return answer;
     }
 
-    private void dfs(int node, int start, int end) {
-        visited[node] = true;
+    private static void dfs(int start, int ignore) {
+        cnt++;
+        visited[start] = true;
 
-        for (int next : map[node]) {
-            if ((node == start && next == end) || (node == end && next == start)) {
+        for (int element : map[start]) {
+            if (element == ignore) {
                 continue;
             }
-
-            if (!visited[next]) {
-                cnt++;
-                dfs(next, start, end);
+            if (!visited[element]) {
+                dfs(element, ignore);
             }
+        }
+    }
+
+    private static void setMap(int n, int[][] wires) {
+        map = new ArrayList[n + 1];
+
+        for (int i = 0; i < n + 1; i++) {
+            map[i] = new ArrayList<>();
+        }
+
+        for (int[] wire : wires) {
+            map[wire[0]].add(wire[1]);
+            map[wire[1]].add(wire[0]);
         }
     }
 }
