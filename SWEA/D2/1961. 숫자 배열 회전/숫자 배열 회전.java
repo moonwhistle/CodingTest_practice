@@ -1,74 +1,68 @@
+import java.util.ArrayList;
 import java.util.Scanner;
 
-public class Solution {
+class Solution {
 
+    static Scanner input = new Scanner(System.in);
     static int[][] map;
+    static ArrayList<String>[] result;
 
     public static void main(String[] args) {
-        Scanner input = new Scanner(System.in);
-
         int T = input.nextInt();
 
-        for (int i = 1; i <= T; i++) {
+        for (int t = 1; t <= T; t++) {
             int N = input.nextInt();
             map = new int[N][N];
+            result = new ArrayList[N];
+            initResult(N);
+            setMap(N);
 
-            for (int y = 0; y < N; y++) {
-                for (int x = 0; x < N; x++) {
-                    map[y][x] = input.nextInt();
-                }
+            for (int i = 0; i < 3; i++) {
+                transpose(N);
+                reverseRow(N);
+                setResult(N);
             }
 
-            String[][] result = new String[N][3];
-
-            // 90
-            transpose(N);
-            reverseRow(N);
-
-            for (int y = 0; y < N; y++) {
-                int[] line = map[y];
-
-                String lineResult = "";
-                for (int lineElement : line) {
-                    lineResult += lineElement;
+            System.out.println("#" + t);
+            for (ArrayList<String> line : result) {
+                for (String lineElement : line) {
+                    System.out.print(lineElement + " ");
                 }
+                System.out.println();
+            }
+        }
+    }
 
-                result[y][0] = lineResult;
+    private static void initResult(int N) {
+        for (int i = 0; i < N; i++) {
+            result[i] = new ArrayList<>();
+        }
+    }
+
+    private static void setResult(int N) {
+        for (int y = 0; y < N; y++) {
+            String line = "";
+
+            for (int x = 0; x < N; x++) {
+                line += String.valueOf(map[y][x]);
             }
 
-            // 180
-            transpose(N);
-            reverseRow(N);
+            result[y].add(line);
+        }
+    }
 
-            for (int y = 0; y < N; y++) {
-                int[] line = map[y];
+    private static void reverseRow(int N) {
+        for (int y = 0; y < N; y++) {
+            int start = 0;
+            int end = N - 1;
 
-                String lineResult = "";
-                for (int lineElement : line) {
-                    lineResult += lineElement;
-                }
+            while (start < end) {
+                int tmp = map[y][start];
+                map[y][start] = map[y][end];
+                map[y][end] = tmp;
 
-                result[y][1] = lineResult;
-            }
-
-            // 270
-            transpose(N);
-            reverseRow(N);
-
-            for (int y = 0; y < N; y++) {
-                int[] line = map[y];
-
-                String lineResult = "";
-                for (int lineElement : line) {
-                    lineResult += lineElement;
-                }
-
-                result[y][2] = lineResult;
-            }
-
-            System.out.println("#" + i);
-            for (int y = 0; y < N; y++) {
-                System.out.println(result[y][0] + " " + result[y][1] + " " + result[y][2]);
+                start++;
+                end--;
             }
         }
     }
@@ -83,17 +77,10 @@ public class Solution {
         }
     }
 
-    private static void reverseRow(int N) {
+    private static void setMap(int N) {
         for (int y = 0; y < N; y++) {
-            int start = 0;
-            int end = N - 1;
-
-            while (start < end) {
-                int temp = map[y][start];
-                map[y][start] = map[y][end];
-                map[y][end] = temp;
-                start++;
-                end--;
+            for (int x = 0; x < N; x++) {
+                map[y][x] = input.nextInt();
             }
         }
     }
