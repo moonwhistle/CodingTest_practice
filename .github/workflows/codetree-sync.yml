@@ -5,14 +5,18 @@ on:
     - cron: '0 16 * * *'  # 매일 KST 1시
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 jobs:
   sync:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout algorithm repo
+      - name: Checkout main repository
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0
+          fetch-depth: 0  # subtree 병합을 위해 전체 히스토리 필요
 
       - name: Set Git config
         run: |
@@ -22,12 +26,15 @@ jobs:
       - name: Add codetree remote
         run: |
           git remote get-url codetree || \
-          git remote add codetree https://github.com/your-username/codetree-solutions.git
+          git remote add codetree https://github.com/moonwhistle/CodeTree_Algorithm.git
           git fetch codetree
 
       - name: Pull codetree subtree
         run: |
-          git subtree pull --prefix=codetree codetree main -m "chore(subtree): sync codetree"
+          git subtree pull \
+            --prefix=codetree \
+            codetree main \
+            -m "chore(subtree): sync codetree"
 
       - name: Push updated subtree
         run: |
