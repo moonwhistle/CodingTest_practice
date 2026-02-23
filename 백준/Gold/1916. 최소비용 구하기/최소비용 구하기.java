@@ -1,83 +1,75 @@
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
-import java.util.List;
 import java.util.PriorityQueue;
-import java.util.Scanner;
+import java.util.StringTokenizer;
 
-public class Main {
+class Main {
 
-    public static void main(String[] args) {
-        Scanner input = new Scanner(System.in);
+    static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+    static StringTokenizer st;
+    static ArrayList<int[]>[] cities;
+    static int[] visited;
 
-        // setting
-        int N = input.nextInt();
-        int M = input.nextInt();
+    public static void main(String[] args) throws IOException {
+        int N = Integer.parseInt(br.readLine());
+        int M = Integer.parseInt(br.readLine());
+        cities = new ArrayList[N + 1];
 
-        List<Bus>[] buses = new ArrayList[N + 1];
-        int[] prices = new int[N + 1];
-
-        Arrays.fill(prices, Integer.MAX_VALUE);
-
-        for (int i = 1; i < N + 1; i++) {
-            buses[i] = new ArrayList<>();
+        for (int i = 0; i <= N; i++) {
+            cities[i] = new ArrayList<>();
         }
 
         for (int i = 0; i < M; i++) {
-            int start = input.nextInt();
-            int end = input.nextInt();
-            int price = input.nextInt();
+            st = new StringTokenizer(br.readLine());
+            int s = Integer.parseInt(st.nextToken());
+            int e = Integer.parseInt(st.nextToken());
+            int w = Integer.parseInt(st.nextToken());
 
-            buses[start].add(new Bus(end, price));
+            cities[s].add(new int[]{e, w});
         }
 
-        int start = input.nextInt();
-        int end = input.nextInt();
+        st = new StringTokenizer(br.readLine());
+        int start = Integer.parseInt(st.nextToken());
+        int end = Integer.parseInt(st.nextToken());
+        visited = new int[N + 1];
+        Arrays.fill(visited, Integer.MAX_VALUE);
+        dijkstra(start, end);
 
-        prices[start] = 0;
+        System.out.println(visited[end]);
+    }
 
-        boolean[] visited = new boolean[N + 1];
+    private static void dijkstra(int start, int end) {
+        PriorityQueue<int[]> q = new PriorityQueue<>(Comparator.comparing(arr -> arr[1]));
+        q.offer(new int[]{start, 0});
+        visited[start] = 0;
 
-        // logic
-        PriorityQueue<Bus> queue = new PriorityQueue<>();
-        queue.add(new Bus(start, 0));
+        while (!q.isEmpty()) {
+            int[] now = q.poll();
+            int s = now[0];
+            int w = now[1];
 
-        while (!queue.isEmpty()) {
-            Bus nowBus = queue.poll();
-
-            if (visited[nowBus.to]) {
+            if(w > visited[s]) {
                 continue;
             }
+            
+            for (int[] city : cities[s]) {
+                int next = city[0];
+                int nextW = city[1] + w;
 
-            visited[nowBus.to] = true;
+                if (nextW < visited[next]) {
+                    visited[next] = nextW;
 
-            if (visited[end]) {
-                System.out.println(prices[end]);
-                break;
-            }
+                    if(next == end) {
+                        continue;
+                    }
 
-            for (Bus bus : buses[nowBus.to]) {
-                if (prices[bus.to] > prices[nowBus.to] + bus.price) {
-                    prices[bus.to] = prices[nowBus.to] + bus.price;
-                    queue.add(new Bus(bus.to, prices[bus.to]));
+                    q.offer(new int[]{next, nextW});
                 }
             }
         }
-
-    }
-}
-
-class Bus implements Comparable<Bus> {
-    int to;
-    int price;
-
-    public Bus(int to, int price) {
-        this.to = to;
-        this.price = price;
-    }
-
-    @Override
-    public int compareTo(Bus other) {
-        return this.price - other.price;
     }
 }
