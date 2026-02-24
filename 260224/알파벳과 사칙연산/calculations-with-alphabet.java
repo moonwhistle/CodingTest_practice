@@ -1,39 +1,49 @@
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
 
 public class Main {
 
-    static List<Character> expressions;
+    static List<Character> st;
+    static List<Character> all;
+    static List<Character> op;
     static int max;
 
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
         String expression = sc.next();
-        expressions = new ArrayList<>();
-        max = Integer.MIN_VALUE;
+        st = new ArrayList<>();
+        all = new ArrayList<>();
+        op = new ArrayList<>();
+        max = 0;
 
-        for (char ex : expression.toCharArray()) {
-            if (ex == '+' || ex == '-' || ex == '*') {
-                expressions.add(ex);
+        for (char e : expression.toCharArray()) {
+            if (e == '+' || e == '-' || e == '*') {
+                op.add(e);
+                continue;
             }
+
+            all.add(e);
+
+            if (st.contains(e)) {
+                continue;
+            }
+
+            st.add(e);
         }
 
-        int size = expression.length() - expressions.size();
-        btk(size, new ArrayList<>());
+        btk(st.size(), new HashMap<>(), 0);
         System.out.println(max);
     }
 
-    private static void btk(int size, List<Integer> box) {
-        if (size == box.size()) {
-            int result = box.get(0);
-            int i = 1;
-            int j = 0;
+    private static void btk(int size, Map<Character, Integer> map, int idx) {
+        if (size == map.size()) {
+            int result = map.get(all.get(0));
 
-            while (i < size) {
-                result = cal(expressions.get(j), box.get(i), result);
-                i++;
-                j++;
+            for (int i = 1; i < all.size(); i++) {
+                result = cal(op.get(i-1), map.get(all.get(i)), result);
             }
 
             max = Math.max(max, result);
@@ -41,10 +51,10 @@ public class Main {
         }
 
         for (int i = 1; i <= 4; i++) {
-            box.add(i);
-            btk(size, box);
-            box.remove(box.size() - 1);
-
+            char num = st.get(idx);
+            map.put(num, i);
+            btk(size, map, idx + 1);
+            map.remove(num);
         }
     }
 
