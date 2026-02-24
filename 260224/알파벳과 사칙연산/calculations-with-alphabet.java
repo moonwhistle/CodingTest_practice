@@ -17,7 +17,7 @@ public class Main {
         st = new ArrayList<>();
         all = new ArrayList<>();
         op = new ArrayList<>();
-        max = 0;
+        max = Integer.MIN_VALUE;
 
         for (char e : expression.toCharArray()) {
             if (e == '+' || e == '-' || e == '*') {
