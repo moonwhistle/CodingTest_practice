@@ -33,7 +33,7 @@ public class Main {
                 int sum1 = subsetMax(nums1, 0, 0, 0);
 
                 if (n - x1 + 1 >= m) {
-                    for (int x2 = x1 + 2; x2 <= n - m; x2++) {
+                    for (int x2 = x1 + m; x2 <= n - m; x2++) {
                         int[] nums2 = getNums(y, x2);
                         int sum2 = subsetMax(nums2, 0, 0, 0);
 
