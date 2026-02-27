@@ -31,6 +31,11 @@ public class Main {
     }
 
     private static void btk(int depth, int sum) {
+        if(sum == k) {
+            max = Math.max(max, k);
+            return;
+        }
+        
         if(depth == n) {
             max = Math.max(max, sum);
             return;
@@ -48,7 +53,7 @@ public class Main {
                 }
 
                 btk(depth + 1, newSum);
-                
+
                 place[i] -= nums[depth];
                 if(isRenew) {
                     isReach[i] = false;
