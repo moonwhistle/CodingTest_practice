@@ -1,5 +1,5 @@
-import java.util.Arrays;
 import java.util.Scanner;
+import java.util.*;
 
 public class Main {
 
@@ -10,6 +10,7 @@ public class Main {
     static int max;
     static boolean[] isReach;
     static int[] place;
+    static List<Integer> list;
 
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
@@ -38,19 +39,17 @@ public class Main {
 
         for(int i = 0 ; i < k; i++) {
             if(!isReach[i]) {
+                list.add(i);
                 place[i] += nums[depth];
-                
                 if(place[i] >= m) {
                     sum += 1;
                     isReach[i] = true;
                 }
-                
                 btk(depth + 1, sum);
+                list.remove(list.size() - 1);
                 place[i] -= nums[depth];
-                
                 if(isReach[i]) {
                     isReach[i] = false;
-                    sum--;
                 }
             }
         }
