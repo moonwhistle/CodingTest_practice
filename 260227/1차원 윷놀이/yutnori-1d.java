@@ -39,18 +39,19 @@ public class Main {
         for(int i = 0 ; i < k; i++) {
             if(!isReach[i]) {
                 place[i] += nums[depth];
-
+                int newSum = sum;
+                boolean isRenew = false;
                 if(place[i] >= m) {
-                    sum += 1;
+                    newSum++;
                     isReach[i] = true;
+                    isRenew = true;
                 }
 
-                btk(depth + 1, sum);
+                btk(depth + 1, newSum);
+                
                 place[i] -= nums[depth];
-
-                if(isReach[i]) {
+                if(isRenew) {
                     isReach[i] = false;
-                    sum--;
                 }
             }
         }
