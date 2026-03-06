@@ -7,7 +7,7 @@ public class Main {
     static boolean[][] visited;
     static int maxCount;
     static int count;
-    static Set<Integer> set;
+    static List<Integer> set;
     static int[] dx = {1, 0, -1, 0};
     static int[] dy = {0, 1, 0, -1};
 
@@ -17,7 +17,7 @@ public class Main {
         grid = new int[n][n];
         visited = new boolean[n][n];
         maxCount = 0;
-        set = new HashSet<>();
+        set = new LinkedList<>();
 
         for (int i = 0; i < n; i++)
             for (int j = 0; j < n; j++)
