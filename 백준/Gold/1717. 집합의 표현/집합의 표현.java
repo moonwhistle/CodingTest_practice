@@ -1,30 +1,38 @@
-import java.util.Scanner;
+import java.io.*;
+import java.util.*;
 
 public class Main {
 
-    static int[] box;
+    static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+    static StringTokenizer st;
 
-    public static void main(String[] args) {
-        Scanner input = new Scanner(System.in);
+    static int[] nodes;
+    static int n;
+    static int m;
 
-        int n = input.nextInt();
-        int m = input.nextInt();
+    public static void main(String[] args) throws IOException {
+        st = new StringTokenizer(br.readLine());
+        n = Integer.parseInt(st.nextToken());
+        m = Integer.parseInt(st.nextToken());
 
-        box = new int[n + 1];
-
-        for (int i = 0; i < n + 1; i++) {
-            box[i] = i;
-        }
+        nodes = new int[n + 1];
+        makeSet();
 
         for (int i = 0; i < m; i++) {
-            int check = input.nextInt();
-            int a = input.nextInt();
-            int b = input.nextInt();
+            st = new StringTokenizer(br.readLine());
+            int cmd = Integer.parseInt(st.nextToken());
+            int a = Integer.parseInt(st.nextToken());
+            int b = Integer.parseInt(st.nextToken());
 
-            if (check == 0) {
+            if(cmd == 0) {
                 union(a, b);
-            } else if (check == 1) {
-                if (find(a) == find(b)) {
+            }
+
+            if(cmd == 1) {
+                int aR = findRoot(a);
+                int bR = findRoot(b);
+
+                if(aR == bR) {
                     System.out.println("YES");
                 } else {
                     System.out.println("NO");
@@ -33,19 +41,23 @@ public class Main {
         }
     }
 
-    public static void union(int a, int b) {
-        int x = find(a);
-        int y = find(b);
-
-        if (x != y) {
-            box[y] = x;
-        }
+    private static void union(int a, int b) {
+        int aR = findRoot(a);
+        int bR = findRoot(b);
+        nodes[bR] = aR;
     }
 
-    public static int find(int x) {
-        if (box[x] != x) {
-            box[x] = find(box[x]);
+    private static int findRoot(int idx) {
+        if (idx == nodes[idx]) {
+            return idx;
         }
-        return box[x];
+
+        return findRoot(nodes[idx]);
+    }
+
+    private static void makeSet() {
+        for (int i = 0; i < n + 1; i++) {
+            nodes[i] = i;
+        }
     }
 }
