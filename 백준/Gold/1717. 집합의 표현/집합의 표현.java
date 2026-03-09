@@ -48,11 +48,11 @@ public class Main {
     }
 
     private static int findRoot(int idx) {
-        if (idx == nodes[idx]) {
-            return idx;
+        if (idx != nodes[idx]) {
+            nodes[idx] = findRoot(nodes[idx]);
         }
 
-        return findRoot(nodes[idx]);
+        return nodes[idx];
     }
 
     private static void makeSet() {
