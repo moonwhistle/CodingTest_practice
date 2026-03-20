@@ -80,6 +80,10 @@ class Main {
         }
 
         while(!queue.isEmpty()) {
+            if(count > max) {
+                return;
+            }
+            
             int[] now = queue.poll();
             int y = now[0];
             int x = now[1];
