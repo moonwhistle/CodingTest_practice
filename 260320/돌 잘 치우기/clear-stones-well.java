@@ -64,7 +64,7 @@ class Main {
             int y = p[0];
             int x = p[1];
             map[y][x] = 0;
-            removeStone(count + 1, idx + 1);
+            removeStone(count + 1, i + 1);
             map[y][x] = 1;
         }
     }
@@ -80,10 +80,6 @@ class Main {
         }
 
         while(!queue.isEmpty()) {
-            if(count > max) {
-                return;
-            }
-            
             int[] now = queue.poll();
             int y = now[0];
             int x = now[1];
