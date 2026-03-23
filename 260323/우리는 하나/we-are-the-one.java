@@ -45,7 +45,7 @@ public class Main {
             return;
         }
 
-        for(int i = idx; i < N; i++) {
+        for(int i = idx; i < N * N; i++) {
             int y = i / N;
             int x = i % N;
             box.add(new int[]{y, x});
