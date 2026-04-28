@@ -1,39 +1,28 @@
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Queue;
+import java.util.*;
 
 class Solution {
-
-    static int count = 0;
-
     public int[] solution(int[] progresses, int[] speeds) {
         List<Integer> answer = new ArrayList<>();
-        Queue<Integer> progressQueue = new LinkedList<>();
-        Queue<Integer> speedQueue = new LinkedList<>();
-
-        for (int i = 0; i < progresses.length; i++) {
-            progressQueue.add(progresses[i]);
-            speedQueue.add(speeds[i]);
-        }
-
-        while (!progressQueue.isEmpty()) {
+        int idx = 0;
+        int count = 0;
+        
+        while(idx < speeds.length) {
+            int cnt = 0;
+            
+            while(idx < speeds.length && progresses[idx] + (speeds[idx] * count) >= 100) {
+                idx++;
+                cnt++;
+            }
+            
+            if(cnt != 0) {
+                answer.add(cnt);
+            }
+            
             count++;
-            int doneCount = 0;
-
-            while (!progressQueue.isEmpty() && progressQueue.peek() + (speedQueue.peek() * count) >= 100) {
-                doneCount++;
-                progressQueue.poll();
-                speedQueue.poll();
-            }
-
-            if (doneCount != 0) {
-                answer.add(doneCount);
-            }
         }
-
+        
         return answer.stream()
-                .mapToInt(Integer::intValue)
-                .toArray();
+            .mapToInt(n -> n)
+            .toArray();
     }
 }
