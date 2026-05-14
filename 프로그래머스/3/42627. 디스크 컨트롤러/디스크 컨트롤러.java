@@ -1,33 +1,55 @@
 import java.util.*;
 
 class Solution {
-    
-    public static int solution(int[][] jobs) {
+    public int solution(int[][] jobs) {
         int answer = 0;
-        Arrays.sort(jobs, Comparator.comparingInt(n -> n[0]));
-        PriorityQueue<Node> pq = new PriorityQueue<>();
-        
+        List<Node> pq = new ArrayList<>();
+        int ii = 0;
         int time = 0;
-        int idx = 0;
-        int count = 0;
         
-        while(count < jobs.length) {
-            while(idx < jobs.length && time >= jobs[idx][0]) {
-                int[] job = jobs[idx];
-                pq.add(new Node(idx , job[0], job[1]));
-                idx++;
+        for(int[] job : jobs) {
+            pq.add(new Node(ii, job[0], job[1]));
+            ii++;
+        }
+        
+        PriorityQueue<Node> process = new PriorityQueue<>();
+        
+        while(!pq.isEmpty() || !process.isEmpty()) {
+            int idx = -1;
+            Map<Integer, Integer> index = new HashMap<>();
+            PriorityQueue<Node> order = new PriorityQueue<>();
+            
+            for(int i = 0 ; i < pq.size(); i++) {
+                Node now = pq.get(i);
+                
+                if(now.start <= time && process.isEmpty()) { // 작업할거 넣기
+                    order.add(now);
+                    index.put(now.id, i);
+                }
             }
             
-            if(pq.isEmpty()) {
-                time++;
-                continue;
+            if(!order.isEmpty()) {
+                Node in = order.poll();
+                process.add(in);
+                idx = index.get(in.id);
             }
             
-            Node node = pq.poll();
-            count++;
+            if(idx != -1) {
+                pq.remove(idx);
+            }
             
-            time += node.l;
-            answer += (time - node.s);
+            time++;
+            
+            if(!process.isEmpty()) {
+                Node pro = process.poll();
+                pro.count++;
+                
+                if(pro.count == pro.length) {
+                    answer += (time - pro.start);
+                } else {
+                    process.add(pro);
+                }
+            }
         }
         
         return answer / jobs.length;
@@ -36,26 +58,28 @@ class Solution {
 
 class Node implements Comparable<Node>{
     
-    int v;
-    int s;
-    int l;
+    int id;
+    int start;
+    int length;
+    int count;
     
-    public Node(int v, int s, int l) {
-        this.v = v;
-        this.s = s;
-        this.l = l;
+    public Node(int id, int start, int length) {
+        this.id = id;
+        this.start = start;
+        this.length = length;
+        this.count = 0;
     }
     
     @Override
     public int compareTo(Node other) {
-        if(l == other.l) {
-            if(s == other.s) {
-                return v - other.v;
+        if(length == other.length) {
+            if(start == other.start) {
+                return id - other.id;
             }
             
-            return s - other.s;
+            return start - other.start;
         }
         
-        return l - other.l;
+        return length - other.length;
     }
 }
