@@ -4,20 +4,21 @@ class Solution {
     public int solution(int[] people, int limit) {
         int answer = 0;
         Arrays.sort(people);
-        int l = people.length;
-        boolean[] visited = new boolean[l];
-        int second = 0;
+        int l = people.length -1;
+        int j = 0;
         
-        for(int i = l - 1; i >= 0; i--) {
-            if(visited[i]) {
+        for(int i = l ; i >= 0; i--) {
+            if(i == j) {
+                answer++;
                 break;
             }
             
-            int sum = people[i];
+            if(j > i) {
+                break;
+            }
             
-            if(sum + people[second] <= limit) {
-                visited[second] = true;
-                second++;
+            if(people[i] + people[j] <= limit) {
+                j++;
             }
             
             answer++;
