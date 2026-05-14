@@ -1,27 +1,35 @@
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 class Solution {
     public String[] solution(String[] players, String[] callings) {
-        Map<String, Integer> ranks = new HashMap<>();
+        Map<Integer, String> order = new HashMap<>(); // 순위별 선수
+        Map<String, Integer> py = new HashMap<>(); // 선수별 순위
         
-        for(int i = 0 ; i < players.length ; i ++) {
-            ranks.put(players[i], i);
+        for(int i = 0 ; i < players.length; i++) {
+            int o = i + 1;
+            String player = players[i];
+            
+            order.put(o, player);
+            py.put(player, o);
         }
         
         for(String call : callings) {
-            int nowRank = ranks.get(call);
+            int nowOrder = py.get(call);
+            String originalPlayer = order.get(nowOrder - 1);
             
-            String current = players[nowRank];
-            String prev = players[nowRank - 1];
+            py.put(call, nowOrder - 1);
+            py.put(originalPlayer, nowOrder);
             
-            players[nowRank - 1] = current;
-            players[nowRank] = prev;
-            
-            ranks.put(current, nowRank - 1);
-            ranks.put(prev, nowRank);
+            order.put(nowOrder, originalPlayer);
+            order.put(nowOrder - 1, call);
         }
         
-        return players;
+        String[] answer = new String[players.length];
+        
+        for(int i = 0 ; i < players.length; i++) {
+            answer[i] = order.get(i + 1);
+        }
+        
+        return answer;
     }
 }
