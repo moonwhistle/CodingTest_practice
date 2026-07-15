@@ -1,61 +1,59 @@
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.Queue;
+import java.util.*;
 
 class Solution {
     
-    static ArrayList[] map;
-    static int[] home;
-
-    public static int solution(int N, int[][] road, int K) {
+    static int[] n;
+    static ArrayList<int[]>[] info;
+    
+    public int solution(int N, int[][] road, int K) {
         int answer = 0;
-        map = new ArrayList[N + 1];
-        home = new int[N + 1];
-
-        //세팅
-        for (int i = 1; i < N + 1; i++) {
-            map[i] = new ArrayList<>();
+        n = new int[N + 1];
+        info = new ArrayList[N + 1];
+        Arrays.fill(n, Integer.MAX_VALUE);
+        n[1] = 0;
+        
+        for(int i = 0 ; i <= N; i++) {
+            info[i] = new ArrayList<>();
         }
-        //집 연결
-        for (int[] home : road) {
-            int start = home[0];
-            int end = home[1];
-            int weight = home[2];
-            map[start].add(new int[]{end, weight});
-            map[end].add(new int[]{start, weight});
+        
+        for(int[] r : road) {
+            int s = r[0];
+            int e = r[1];
+            int c = r[2];
+            
+            info[s].add(new int[]{e, c});
+            info[e].add(new int[]{s, c});
         }
-        //최단 거리 배열 세팅
-        home[1] = 0;
-        for (int i = 2; i < N + 1; i++) {
-            home[i] = Integer.MAX_VALUE;
-        }
-
-        bfs(1);
-
-        for(int i = 1; i<N+1; i++) {
-            if(home[i] <= K) {
+        
+        dijkstra();
+        
+        for(int k : n) {
+            if(k <= K) {
                 answer++;
             }
         }
+
         return answer;
     }
-
-    private static void bfs(int k) {
-        Queue<Integer> queue = new LinkedList<>();
-        queue.offer(k);
-
-        while (!queue.isEmpty()) {
-            int current = queue.poll();
-            for (int[] link : (ArrayList<int[]>) map[current]) {
-                int connect = link[0];
-                int weight = link[1];
-
-                if(weight + home[current] < home[connect]) {
-                    home[connect] = weight + home[current];
-                    queue.add(connect);
+    
+    private void dijkstra() {
+        PriorityQueue<int[]> queue = new PriorityQueue<>((a, b) -> Integer.compare(a[1], b[1]));
+        queue.add(new int[] {1, 0});
+        
+        while(!queue.isEmpty()) {
+            int[] now = queue.poll();
+            int s = now[0];
+            int c = now[1];
+            
+            for(int[] i : info[s]) {
+                int e = i[0];
+                int count = i[1];
+                
+                if(n[e] > count + c) {
+                    n[e] = count + c;
+                    queue.add(new int[]{e, count + c});
                 }
             }
         }
     }
-
 }
